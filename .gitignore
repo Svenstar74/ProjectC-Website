@@ -1,0 +1,15 @@
+# Coverage directory 
+coverage
+
+# Dependency directories
+node_modules/
+
+# Output of 'npm pack'
+*.tgz
+
+# Build output
+build
+dist
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test

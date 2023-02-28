@@ -1,0 +1,15 @@
+.App {
+  display: flex;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+.graphView {
+  width: 100%;
+}
+
+.detailsView {
+  width: 500px;
+  transform: translateX(0px);
+}
