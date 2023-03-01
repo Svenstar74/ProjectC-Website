@@ -1,7 +1,0 @@
-@import '../style.css';
-
-.container {
-  background: var(--color-bright);
-  width: 100%;
-  height: 100%;
-}

@@ -3,7 +3,7 @@ import { DetailsViewDrawer } from './DetailsView/DetailsViewDrawer';
 
 import { DisplayGraph } from './GraphView/DisplayGraph';
 
-function App() {
+function App() {  
   return (
     <div className={`"App" ${classes.App}`}>
       <div

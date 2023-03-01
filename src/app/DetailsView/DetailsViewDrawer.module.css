@@ -1,0 +1,23 @@
+@import '../style.css';
+.container {
+  margin: 5px 10px;
+  /* box-shadow: 0 0 5px 2px gray; */
+  border: 2px solid rgb(206, 206, 206);
+  box-sizing: border-box;
+  border-radius: 4px;
+  height: calc(100% - 10px);
+  padding-top: 30px;
+}
+
+.header {
+  background: rgb(226, 226, 226);
+  box-shadow: 0 0 2px 2px rgb(226, 226, 226);
+  padding: 10px;
+  width: calc(100% - 24px);
+  margin: 0 auto;
+  letter-spacing: 0.1rem;
+}
+
+.content {
+  padding: 10px 20px;
+}
