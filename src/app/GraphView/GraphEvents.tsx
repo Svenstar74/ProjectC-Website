@@ -66,6 +66,7 @@ export const GraphEvents: React.FC = () => {
         });
       },
     });
+    // eslint-disable-next-line
   }, [registerEvents, sigma, draggedNode]);
 
   return null;
