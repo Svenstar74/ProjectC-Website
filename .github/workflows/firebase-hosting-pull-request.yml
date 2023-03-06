@@ -5,6 +5,7 @@ on:
       - production
 jobs:
   build_and_preview:
+    permissions: write-all
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
