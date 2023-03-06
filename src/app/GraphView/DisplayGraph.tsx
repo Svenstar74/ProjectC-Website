@@ -12,6 +12,22 @@ export const LoadGraph = () => {
   const loadGraph = useLoadGraph();
 
   useEffect(() => {
+    // fetch('http://localhost:8000/api/v1/nodes')
+    //   .then(async (res) => {
+    //     const data = await res.json() as any[];
+    //     // console.log(await res.json());
+
+    //     const graph = new Graph({
+    //       allowSelfLoops: false,
+    //       multi: false,
+    //       type: 'directed',
+    //     });
+        
+    //     data.forEach((entry: any) => {
+    //       console.log(entry.x);
+    //     })
+    //   })
+    
     const graph = new Graph({
       allowSelfLoops: false,
       multi: false,
