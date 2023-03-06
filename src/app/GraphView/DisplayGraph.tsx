@@ -12,6 +12,22 @@ export const LoadGraph = () => {
   const loadGraph = useLoadGraph();
 
   useEffect(() => {
+    // fetch('http://localhost:8000/api/v1/nodes')
+    //   .then(async (res) => {
+    //     const data = await res.json() as any[];
+    //     // console.log(await res.json());
+
+    //     const graph = new Graph({
+    //       allowSelfLoops: false,
+    //       multi: false,
+    //       type: 'directed',
+    //     });
+        
+    //     data.forEach((entry: any) => {
+    //       console.log(entry.x);
+    //     })
+    //   })
+    
     const graph = new Graph({
       allowSelfLoops: false,
       multi: false,
@@ -19,8 +35,8 @@ export const LoadGraph = () => {
     });
 
     graph.addNode('A', { x: 0, y: 0, label: 'Cause0', size: 10 });
-    graph.addNode('B', { x: 1, y: 1, label: 'Effect', size: 10 });
-    graph.addNode('C', { x: 2, y: 2, label: 'Test', size: 10 });
+    graph.addNode('B', { x: 1, y: 1, label: 'Effect1', size: 10 });
+    graph.addNode('C', { x: 2, y: 2, label: 'Test1', size: 10 });
     graph.addNode('D', { x: 2, y: 2, label: 'Cause1', size: 10 });
     graph.addEdge('A', 'B', { size: 5 });
 
