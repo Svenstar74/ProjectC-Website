@@ -17,6 +17,7 @@ export const LoadGraph = () => {
       multi: false,
       type: 'directed',
     });
+
     graph.addNode('A', { x: 0, y: 0, label: 'Cause0', size: 10 });
     graph.addNode('B', { x: 1, y: 1, label: 'Effect', size: 10 });
     graph.addNode('C', { x: 2, y: 2, label: 'Test', size: 10 });
