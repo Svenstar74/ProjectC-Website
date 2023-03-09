@@ -59,12 +59,23 @@ export const GraphEvents: React.FC = () => {
       rightClickStage: (e) => {
         // showContextMenu
         const pos = sigma.viewportToGraph(e.event);
-        sigma.getGraph().addNode('Test', {
-          x: pos.x,
-          y: pos.y,
-          size: 10,
-        });
+        // sigma.getGraph().addNode('Test', {
+        //   x: pos.x,
+        //   y: pos.y,
+        //   size: 10,
+        // });
       },
+      doubleClickStage: (e) => {
+        e.preventSigmaDefault();
+      },
+      wheelStage: (e: any) => {
+        // const currentFontSize = sigma.getSetting('labelSize');
+        // const delta = e.event.delta;
+        // sigma.setSetting('labelSize', currentFontSize! + delta);
+        // sigma.getGraph().forEachNode(node => {
+        //   sigma.getGraph().setNodeAttribute(node, 'fontSize', )
+        // })
+      }
     });
     // eslint-disable-next-line
   }, [registerEvents, sigma, draggedNode]);
