@@ -128,7 +128,7 @@ export default class EdgeArrowHeadProgram extends AbstractEdgeProgram {
       return;
     }
 
-    const thickness = data.size * 4 || 1,
+    const thickness = data.size * 2.5 || 1,
       radius = targetData.size || 1,
       x1 = sourceData.x,
       y1 = sourceData.y,

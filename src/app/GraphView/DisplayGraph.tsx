@@ -24,19 +24,19 @@ export const LoadGraph = () => {
       data.forEach((node: AggregatedNodeModel) => {
         graph.addNode(
           node.climateConcept.id,
-          { x: Math.random(), y: Math.random(), label: node.climateConcept.stringRepresentation}); // forceLabel: true 
+          { x: Math.random(), y: Math.random(), label: node.climateConcept.stringRepresentation, forceLabel: true }); 
       })
 
       data.forEach((node: AggregatedNodeModel) => {
         node.climateConcept.incomingConnections.forEach(connection => {
           try {
-            graph.addEdge(connection, node.climateConcept.id);
+            graph.addEdge(connection, node.climateConcept.id, { size: 2 });
           } catch {}
         })
 
         node.climateConcept.outgoingConnections.forEach(connection => {
           try {
-            graph.addEdge(node.climateConcept.id, connection);
+            graph.addEdge(node.climateConcept.id, connection, { size: 2 });
           } catch {}
         })
       })
@@ -44,7 +44,7 @@ export const LoadGraph = () => {
       forceAtlas2.assign(graph, {
         iterations: 100,
         settings: {
-          gravity: 11,
+          gravity: 8,
         }
       });
 
@@ -60,7 +60,7 @@ export const DisplayGraph = () => {
       <SigmaContainer
         settings={{
           defaultEdgeType: 'arrow',
-          labelRenderedSizeThreshold: 3,
+          labelSize: 2,
           edgeProgramClasses: { arrow: ArrowEdgeProgram },
           // nodeProgramClasses: {
           //   border: NodeProgramBorder

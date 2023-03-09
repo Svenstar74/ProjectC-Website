@@ -1,5 +1,5 @@
 import classes from './App.module.css';
-import { DetailsViewDrawer } from './DetailsView/DetailsViewDrawer';
+import { BottomDetailsView } from './BottomDetailsView/BottomDetailsView';
 
 import { DisplayGraph } from './GraphView/DisplayGraph';
 
@@ -12,8 +12,8 @@ function App() {
       >
         <DisplayGraph></DisplayGraph>
       </div>
-      <div className={classes.detailsView}>
-        <DetailsViewDrawer />
+      <div className={classes.bottomDetails}>
+        <BottomDetailsView />
       </div>
     </div>
   );
