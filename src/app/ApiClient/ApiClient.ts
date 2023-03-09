@@ -2,7 +2,9 @@ import axios from 'axios';
 
 import { AggregatedNodeModel } from '@svenstar74/business-logic';
 
-const baseUrl = process.env.API_BASE_URL ?? 'http://localhost:8000';
+console.log(process.env.REACT_APP_API_BASE_URL)
+console.log(process.env.NODE_ENV)
+const baseUrl = process.env.REACT_APP_API_BASE_URL ?? 'http://localhost:8000';
 
 const apiCall = async (
   method: string,
