@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { clearSelectedEdge, clearSelectedNode, setSelectedEdge, setSelectedNode } from '../store/graphSlice';
+import {
+  clearSelectedEdge,
+  clearSelectedNode,
+  setSelectedEdge,
+  setSelectedNode,
+} from '../store/graphSlice';
 
 export const GraphEvents: React.FC = () => {
   const selectedNode = useAppSelector((state) => state.graph.selectedNode);
   const dispatch = useAppDispatch();
-  
+
   const registerEvents = useRegisterEvents();
   const sigma = useSigma();
 
@@ -16,15 +21,17 @@ export const GraphEvents: React.FC = () => {
   useEffect(() => {
     sigma.getCamera().on('updated', (state) => {
       sigma.setSetting('labelSize', Math.min(2 / state.ratio, 20));
-    })
-  }, [])
-  
+    });
+  }, [sigma]);
+
   useEffect(() => {
     // Register the events
     registerEvents({
       downNode: (e) => {
         if (selectedNode) {
-          sigma.getGraph().removeNodeAttribute(selectedNode.node, 'highlighted');
+          sigma
+            .getGraph()
+            .removeNodeAttribute(selectedNode.node, 'highlighted');
         }
 
         setDraggedNode(e.node);
@@ -34,7 +41,10 @@ export const GraphEvents: React.FC = () => {
         if (draggedNode) {
           setDraggedNode(null);
 
-          const nodeAttributes = sigma.getGraph().getNodeAttributes(draggedNode);
+          const nodeAttributes = sigma
+            .getGraph()
+            .getNodeAttributes(draggedNode);
+
           dispatch(setSelectedNode({
             node: draggedNode,
             x: nodeAttributes.x,
@@ -51,12 +61,12 @@ export const GraphEvents: React.FC = () => {
 
           sigma.getGraph().setNodeAttribute(draggedNode, 'x', pos.x);
           sigma.getGraph().setNodeAttribute(draggedNode, 'y', pos.y);
-      
+
           // Prevent sigma to move camera:
           e.preventSigmaDefault();
         }
       },
-      clickEdge: (e) => {        
+      clickEdge: (e) => {
         const sourceId = sigma.getGraph().source(e.edge);
         const targetId = sigma.getGraph().target(e.edge);
 
@@ -64,12 +74,14 @@ export const GraphEvents: React.FC = () => {
         const targetString = sigma.getGraph().getNodeAttribute(targetId, 'label');
     
         // sigma.getGraph().setEdgeAttribute(e.edge, 'color', 'red');
-        
+
         dispatch(setSelectedEdge([sourceString, targetString]));
       },
       clickStage: () => {
         if (selectedNode) {
-          sigma.getGraph().removeNodeAttribute(selectedNode.node, 'highlighted');
+          sigma
+            .getGraph()
+            .removeNodeAttribute(selectedNode.node, 'highlighted');
         }
 
         dispatch(clearSelectedNode());
@@ -77,7 +89,7 @@ export const GraphEvents: React.FC = () => {
       },
       doubleClickStage: (e) => {
         e.preventSigmaDefault();
-      }
+      },
     });
     // eslint-disable-next-line
   }, [registerEvents, sigma, draggedNode]);
