@@ -1,54 +1,55 @@
-import { useEffect } from 'react';
 import Graph from 'graphology';
+import forceAtlas2 from 'graphology-layout-forceatlas2';
 import { ControlsContainer, FullScreenControl, SearchControl, SigmaContainer, useLoadGraph, ZoomControl } from '@react-sigma/core';
 
 import '@react-sigma/core/lib/react-sigma.min.css';
 
+import { AggregatedNodeModel } from '@svenstar74/business-logic/build/src/adapters/Nodes.repository';
 import classes from './DisplayGraph.module.css';
 import { GraphEvents } from './GraphEvents';
 import ArrowEdgeProgram from './edge.arrow';
+import { ApiClient } from '../ApiClient/ApiClient';
 
 export const LoadGraph = () => {
   const loadGraph = useLoadGraph();
 
-  useEffect(() => {
-    // fetch('http://localhost:8000/api/v1/nodes')
-    //   .then(async (res) => {
-    //     const data = await res.json() as any[];
-    //     // console.log(await res.json());
-
-    //     const graph = new Graph({
-    //       allowSelfLoops: false,
-    //       multi: false,
-    //       type: 'directed',
-    //     });
-        
-    //     data.forEach((entry: any) => {
-    //       console.log(entry.x);
-    //     })
-    //   })
-    
-    const graph = new Graph({
-      allowSelfLoops: false,
-      multi: false,
-      type: 'directed',
-    });
-    graph.addNode('A', { x: 0, y: 0, label: 'Cause1', size: 10 });
-    graph.addNode('B', { x: 1, y: 1, label: 'Effect2', size: 10 });
-    graph.addNode('C', { x: 2, y: 2, label: 'Test1', size: 10 });
-    graph.addNode('D', { x: 2, y: 2, label: 'Cause2', size: 10 });
-    graph.addEdge('A', 'B', { size: 5 });
-
-    for (let i = 0; i < 100; i++) {
-      graph.addNode(i, {
-        x: Math.random() * 4,
-        y: Math.random() * 4,
-        size: 4,
+  new ApiClient().getAllNodesAggregated()
+    .then(data => {
+      const graph = new Graph({
+        allowSelfLoops: false,
+        multi: false,
+        type: 'directed',
       });
-    }
 
-    loadGraph(graph);
-  }, [loadGraph]);
+      data.forEach((node: AggregatedNodeModel) => {
+        graph.addNode(
+          node.climateConcept.id,
+          { x: Math.random(), y: Math.random(), label: node.climateConcept.stringRepresentation}); // forceLabel: true 
+      })
+
+      data.forEach((node: AggregatedNodeModel) => {
+        node.climateConcept.incomingConnections.forEach(connection => {
+          try {
+            graph.addEdge(connection, node.climateConcept.id);
+          } catch {}
+        })
+
+        node.climateConcept.outgoingConnections.forEach(connection => {
+          try {
+            graph.addEdge(node.climateConcept.id, connection);
+          } catch {}
+        })
+      })
+          
+      forceAtlas2.assign(graph, {
+        iterations: 100,
+        settings: {
+          gravity: 11,
+        }
+      });
+
+      loadGraph(graph);
+    })
 
   return null;
 };
@@ -59,7 +60,14 @@ export const DisplayGraph = () => {
       <SigmaContainer
         settings={{
           defaultEdgeType: 'arrow',
+          labelRenderedSizeThreshold: 3,
           edgeProgramClasses: { arrow: ArrowEdgeProgram },
+          // nodeProgramClasses: {
+          //   border: NodeProgramBorder
+          // }
+          // labelRenderer(context, data, settings) {
+          //   drawLabel(context, data, settings)
+          // },
         }}
         style={{ width: '100%', height: '100%' }}
       >
