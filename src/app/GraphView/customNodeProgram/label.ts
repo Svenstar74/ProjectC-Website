@@ -16,7 +16,7 @@ export default function drawLabel(
   settings: Settings,
 ): void {
   if (!data.label) return;
-  // console.log(context);
+
   const size = settings.labelSize,
     font = settings.labelFont,
     weight = settings.labelWeight,
@@ -25,7 +25,7 @@ export default function drawLabel(
       : settings.labelColor.color;
 
   context.fillStyle = color;
-  context.font = `${weight} 3px ${font}`;
+  context.font = `${weight} ${size}px ${font}`;
 
-  context.fillText(data.label, data.x + data.size + 3, data.y + 3 / 3);
+  context.fillText(data.label, data.x + data.size + 3, data.y + size / 3);
 }

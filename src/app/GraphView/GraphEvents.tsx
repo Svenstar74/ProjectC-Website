@@ -58,7 +58,7 @@ export const GraphEvents: React.FC = () => {
       },
       rightClickStage: (e) => {
         // showContextMenu
-        const pos = sigma.viewportToGraph(e.event);
+        // const pos = sigma.viewportToGraph(e.event);
         // sigma.getGraph().addNode('Test', {
         //   x: pos.x,
         //   y: pos.y,
