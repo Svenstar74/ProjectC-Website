@@ -2,23 +2,36 @@ import React, { useEffect, useState } from 'react';
 
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { clearSelectedNode, setSelectedNode } from '../store/graphSlice';
+import {
+  clearSelectedEdge,
+  clearSelectedNode,
+  setSelectedEdge,
+  setSelectedNode,
+} from '../store/graphSlice';
 
 export const GraphEvents: React.FC = () => {
   const selectedNode = useAppSelector((state) => state.graph.selectedNode);
   const dispatch = useAppDispatch();
-  
+
   const registerEvents = useRegisterEvents();
   const sigma = useSigma();
 
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
 
   useEffect(() => {
+    sigma.getCamera().on('updated', (state) => {
+      sigma.setSetting('labelSize', Math.min(2 / state.ratio, 20));
+    });
+  }, [sigma]);
+
+  useEffect(() => {
     // Register the events
     registerEvents({
       downNode: (e) => {
         if (selectedNode) {
-          sigma.getGraph().removeNodeAttribute(selectedNode.node, 'highlighted');
+          sigma
+            .getGraph()
+            .removeNodeAttribute(selectedNode.node, 'highlighted');
         }
 
         setDraggedNode(e.node);
@@ -28,7 +41,10 @@ export const GraphEvents: React.FC = () => {
         if (draggedNode) {
           setDraggedNode(null);
 
-          const nodeAttributes = sigma.getGraph().getNodeAttributes(draggedNode);
+          const nodeAttributes = sigma
+            .getGraph()
+            .getNodeAttributes(draggedNode);
+
           dispatch(setSelectedNode({
             node: draggedNode,
             x: nodeAttributes.x,
@@ -45,37 +61,35 @@ export const GraphEvents: React.FC = () => {
 
           sigma.getGraph().setNodeAttribute(draggedNode, 'x', pos.x);
           sigma.getGraph().setNodeAttribute(draggedNode, 'y', pos.y);
-      
+
           // Prevent sigma to move camera:
           e.preventSigmaDefault();
         }
       },
+      clickEdge: (e) => {
+        const sourceId = sigma.getGraph().source(e.edge);
+        const targetId = sigma.getGraph().target(e.edge);
+
+        const sourceString = sigma.getGraph().getNodeAttribute(sourceId, 'label');
+        const targetString = sigma.getGraph().getNodeAttribute(targetId, 'label');
+    
+        // sigma.getGraph().setEdgeAttribute(e.edge, 'color', 'red');
+
+        dispatch(setSelectedEdge([sourceString, targetString]));
+      },
       clickStage: () => {
         if (selectedNode) {
-          sigma.getGraph().removeNodeAttribute(selectedNode.node, 'highlighted');
+          sigma
+            .getGraph()
+            .removeNodeAttribute(selectedNode.node, 'highlighted');
         }
+
         dispatch(clearSelectedNode());
-      },
-      rightClickStage: (e) => {
-        // showContextMenu
-        const pos = sigma.viewportToGraph(e.event);
-        // sigma.getGraph().addNode('Test', {
-        //   x: pos.x,
-        //   y: pos.y,
-        //   size: 10,
-        // });
+        dispatch(clearSelectedEdge());
       },
       doubleClickStage: (e) => {
         e.preventSigmaDefault();
       },
-      wheelStage: (e: any) => {
-        // const currentFontSize = sigma.getSetting('labelSize');
-        // const delta = e.event.delta;
-        // sigma.setSetting('labelSize', currentFontSize! + delta);
-        // sigma.getGraph().forEachNode(node => {
-        //   sigma.getGraph().setNodeAttribute(node, 'fontSize', )
-        // })
-      }
     });
     // eslint-disable-next-line
   }, [registerEvents, sigma, draggedNode]);
