@@ -8,10 +8,13 @@ export const DetailsViewDrawer = () => {
     <div className={classes.container}>
       <div className={classes.header}>NODE ATTRIBUTES</div>
       <div className={classes.content}>
-        { selectedNode && (
+        {selectedNode && (
           <div>
-            <p>Node name: &emsp; { selectedNode.label }</p>
-            <p>x: { selectedNode.x.toFixed(2) } &emsp; y: { selectedNode.y.toFixed(2) }  &emsp; size: { selectedNode.size }</p>
+            <p>Node name: &emsp; {selectedNode.label}</p>
+            <p>
+              x: {selectedNode.x.toFixed(2)} &emsp; y:{' '}
+              {selectedNode.y.toFixed(2)} &emsp; size: {selectedNode.size}
+            </p>
             <p></p>
           </div>
         )}

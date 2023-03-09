@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "./store";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from './store';
 
 interface NodeAttributes {
   node: string;
@@ -18,8 +18,8 @@ interface GraphState {
 const initialState: GraphState = {
   last: 'node',
   selectedNode: null,
-  selectedEdge: []
-}
+  selectedEdge: [],
+};
 
 export const graphSlice = createSlice({
   name: 'graph',
@@ -41,11 +41,16 @@ export const graphSlice = createSlice({
     },
     clearSelectedEdge: (state) => {
       state.selectedEdge = [];
-    }
+    },
   },
 });
 
-export const { setSelectedNode, clearSelectedNode, setSelectedEdge, clearSelectedEdge } = graphSlice.actions;
+export const {
+  setSelectedNode,
+  clearSelectedNode,
+  setSelectedEdge,
+  clearSelectedEdge,
+} = graphSlice.actions;
 export const selectGraph = (state: RootState) => state.graph.selectedNode;
 
 export default graphSlice.reducer;

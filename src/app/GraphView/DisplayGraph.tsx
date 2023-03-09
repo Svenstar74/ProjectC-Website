@@ -1,55 +1,64 @@
 import Graph from 'graphology';
 import forceAtlas2 from 'graphology-layout-forceatlas2';
-import { ControlsContainer, FullScreenControl, SearchControl, SigmaContainer, useLoadGraph, ZoomControl } from '@react-sigma/core';
+import {
+  ControlsContainer,
+  FullScreenControl,
+  SearchControl,
+  SigmaContainer,
+  useLoadGraph,
+  ZoomControl,
+} from '@react-sigma/core';
 
 import '@react-sigma/core/lib/react-sigma.min.css';
 
 import { AggregatedNodeModel } from '@svenstar74/business-logic/build/src/adapters/Nodes.repository';
 import classes from './DisplayGraph.module.css';
 import { GraphEvents } from './GraphEvents';
-import ArrowEdgeProgram from './edge.arrow';
+import ArrowEdgeProgram from './customPrograms/edge.arrow';
 import { ApiClient } from '../ApiClient/ApiClient';
 
 export const LoadGraph = () => {
   const loadGraph = useLoadGraph();
 
-  new ApiClient().getAllNodesAggregated()
-    .then(data => {
-      const graph = new Graph({
-        allowSelfLoops: false,
-        multi: false,
-        type: 'directed',
+  new ApiClient().getAllNodesAggregated().then((data) => {
+    const graph = new Graph({
+      allowSelfLoops: false,
+      multi: false,
+      type: 'directed',
+    });
+
+    data.forEach((node: AggregatedNodeModel) => {
+      graph.addNode(node.climateConcept.id, {
+        x: Math.random(),
+        y: Math.random(),
+        label: node.climateConcept.stringRepresentation,
+        forceLabel: true,
+      });
+    });
+
+    data.forEach((node: AggregatedNodeModel) => {
+      node.climateConcept.incomingConnections.forEach((connection) => {
+        try {
+          graph.addEdge(connection, node.climateConcept.id, { size: 2 });
+        } catch {}
       });
 
-      data.forEach((node: AggregatedNodeModel) => {
-        graph.addNode(
-          node.climateConcept.id,
-          { x: Math.random(), y: Math.random(), label: node.climateConcept.stringRepresentation, forceLabel: true }); 
-      })
-
-      data.forEach((node: AggregatedNodeModel) => {
-        node.climateConcept.incomingConnections.forEach(connection => {
-          try {
-            graph.addEdge(connection, node.climateConcept.id, { size: 2 });
-          } catch {}
-        })
-
-        node.climateConcept.outgoingConnections.forEach(connection => {
-          try {
-            graph.addEdge(node.climateConcept.id, connection, { size: 2 });
-          } catch {}
-        })
-      })
-          
-      forceAtlas2.assign(graph, {
-        iterations: 100,
-        settings: {
-          gravity: 8,
-        }
+      node.climateConcept.outgoingConnections.forEach((connection) => {
+        try {
+          graph.addEdge(node.climateConcept.id, connection, { size: 2 });
+        } catch {}
       });
+    });
 
-      loadGraph(graph);
-    })
+    forceAtlas2.assign(graph, {
+      iterations: 100,
+      settings: {
+        gravity: 8,
+      },
+    });
+
+    loadGraph(graph);
+  });
 
   return null;
 };
@@ -78,7 +87,7 @@ export const DisplayGraph = () => {
           <FullScreenControl />
         </ControlsContainer>
         <ControlsContainer position='bottom-right'>
-          <SearchControl style={{ width: "200px" }} />
+          <SearchControl style={{ width: '200px' }} />
         </ControlsContainer>
       </SigmaContainer>
     </div>
