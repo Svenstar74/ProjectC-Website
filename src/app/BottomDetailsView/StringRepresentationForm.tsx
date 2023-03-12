@@ -1,4 +1,4 @@
-import { IconButton, MenuItem, TextField, Tooltip } from '@mui/material';
+import { IconButton, TextField, Tooltip } from '@mui/material';
 import SaveSharpIcon from '@mui/icons-material/SaveSharp';
 
 import { StringRepresentation } from '@svenstar74/business-logic';

@@ -9,7 +9,7 @@ import {
   setSelectedNode,
 } from '../store/graphSlice';
 import { useApiClient } from '../hooks/useApiClient';
-import { setDeletedEdge, showContextMenu, showDelEdgeDialog } from '../store/uiSlice';
+import { setDeletedEdge, showContextMenu } from '../store/uiSlice';
 
 export const GraphEvents: React.FC = () => {
   const apiClient = useApiClient();

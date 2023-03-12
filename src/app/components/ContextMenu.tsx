@@ -8,7 +8,6 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import classes from './ContextMenu.module.css';
 import ListItemText from '@mui/material/ListItemText';
-import { NewNodeDialog } from './NewNodeDialog';
 import { showDelEdgeDialog, showNewEdgeDialog, showNewNodeDialog } from '../store/uiSlice';
 import { useApiClient } from '../hooks/useApiClient';
 
@@ -28,7 +27,7 @@ export const ContextMenu = () => {
   
   const deleteNode = async () => {
     if (nodeToDelete) {
-      const result = await apiClient.deleteNode(nodeToDelete);
+      await apiClient.deleteNode(nodeToDelete);
     }
   }
   

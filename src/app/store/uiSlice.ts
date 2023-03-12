@@ -1,11 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Menu {
-  show: boolean;
-  position?: number[];
-  climateConceptId?: string;
-}
-
 interface UiState {
   showContextMenu: boolean;
   contextMenuOptions: string[];

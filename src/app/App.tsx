@@ -4,7 +4,6 @@ import { ContextMenu } from './components/ContextMenu';
 import { DelEdgeDialog } from './components/DelEdgeDialog';
 import { NewEdgeDialog } from './components/NewEdgeDialog';
 import { NewNodeDialog } from './components/NewNodeDialog';
-import { DetailsViewDrawer } from './DetailsView/DetailsViewDrawer';
 
 import { DisplayGraph } from './GraphView/DisplayGraph';
 import { useAppDispatch, useAppSelector } from './store/hooks';

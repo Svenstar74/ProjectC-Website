@@ -4,8 +4,6 @@ import { useApiClient } from "../hooks/useApiClient";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { hideNewEdgeDialog } from "../store/uiSlice";
 
-import classes from './NewEdgeDialog.module.css';
-
 export const NewEdgeDialog = ({ open }: { open: boolean }) => {
   const dispatch = useAppDispatch();
   const apiClient = useApiClient();
@@ -28,6 +26,8 @@ export const NewEdgeDialog = ({ open }: { open: boolean }) => {
     apiClient.getListOfStringRepresentations().then((data) => {
       setStringRepresentations(data);
     });
+
+    // eslint-disable-next-line
   }, [])
   
   return (

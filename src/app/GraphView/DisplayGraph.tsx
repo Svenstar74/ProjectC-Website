@@ -1,5 +1,5 @@
 import Graph from 'graphology';
-import forceAtlas2 from 'graphology-layout-forceatlas2';
+
 import {
   ControlsContainer,
   FullScreenControl,
@@ -19,7 +19,6 @@ import { useWebSocket } from '../hooks/useWebSocket';
 import { useState, useContext } from 'react';
 import Sigma from 'sigma';
 import { AggregatedNodeModel } from '@svenstar74/business-logic';
-import { useAppDispatch } from '../store/hooks';
 import { AppContext } from '../store/context/AppContext';
 
 export const LoadGraph = () => {

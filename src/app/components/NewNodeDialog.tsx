@@ -36,7 +36,7 @@ export const NewNodeDialog = ({ open }: { open: boolean }) => {
     }
     
     try {
-      const stringRepresentation = StringRepresentation.parse(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`)
+      StringRepresentation.parse(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`)
     } catch (error) {
       console.log(error)
       return true;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { AggregatedNodeModel, ClimateConceptModel, Node } from '@svenstar74/business-logic';
+import { AggregatedNodeModel, ClimateConceptModel } from '@svenstar74/business-logic';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL ?? 'http://localhost:8000';
 
@@ -77,7 +77,7 @@ export class ApiClient {
   }
   
   async addEdge(sourceClimateConceptId: string, stringRepresentation: string): Promise<void> {
-    const result = await apiCall(
+    await apiCall(
       'POST',
       '/api/v1/nodes/add-edge',
       this.headers,
