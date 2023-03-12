@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 
 import { store } from './app/store/store';
 import { AppContextProvider } from './app/store/context/AppContext';
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
