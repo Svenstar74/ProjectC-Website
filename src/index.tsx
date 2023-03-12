@@ -7,16 +7,17 @@ import App from './app/App';
 import reportWebVitals from './reportWebVitals';
 
 import { store } from './app/store/store';
+import { AppContextProvider } from './app/store/context/AppContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <AppContextProvider>
+        <App />
+      </AppContextProvider>
     </Provider>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

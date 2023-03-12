@@ -11,16 +11,22 @@ import {
 
 import '@react-sigma/core/lib/react-sigma.min.css';
 
-import { AggregatedNodeModel } from '@svenstar74/business-logic/build/src/adapters/Nodes.repository';
 import classes from './DisplayGraph.module.css';
 import { GraphEvents } from './GraphEvents';
 import ArrowEdgeProgram from './customPrograms/edge.arrow';
-import { ApiClient } from '../ApiClient/ApiClient';
+import { useApiClient } from '../hooks/useApiClient';
+import { useWebSocket } from '../hooks/useWebSocket';
+import { useState, useContext } from 'react';
+import Sigma from 'sigma';
+import { AggregatedNodeModel } from '@svenstar74/business-logic';
+import { useAppDispatch } from '../store/hooks';
+import { AppContext } from '../store/context/AppContext';
 
 export const LoadGraph = () => {
+  const apiClient = useApiClient();
   const loadGraph = useLoadGraph();
 
-  new ApiClient().getAllNodesAggregated().then((data) => {
+  apiClient.getAllNodesAggregated().then((data) => {
     const graph = new Graph({
       allowSelfLoops: false,
       multi: false,
@@ -29,44 +35,64 @@ export const LoadGraph = () => {
 
     data.forEach((node: AggregatedNodeModel) => {
       graph.addNode(node.climateConcept.id, {
-        x: Math.random(),
-        y: Math.random(),
+        nodeId: node.id,
+        x: node.x,
+        y: node.y,
         label: node.climateConcept.stringRepresentation,
         forceLabel: true,
       });
     });
 
     data.forEach((node: AggregatedNodeModel) => {
-      node.climateConcept.incomingConnections.forEach((connection) => {
+      node.climateConcept.incomingConnections.forEach((connection: string) => {
         try {
           graph.addEdge(connection, node.climateConcept.id, { size: 2 });
         } catch {}
       });
 
-      node.climateConcept.outgoingConnections.forEach((connection) => {
+      node.climateConcept.outgoingConnections.forEach((connection: string) => {
         try {
           graph.addEdge(node.climateConcept.id, connection, { size: 2 });
         } catch {}
       });
     });
 
-    forceAtlas2.assign(graph, {
-      iterations: 100,
-      settings: {
-        gravity: 8,
-      },
-    });
+    // const sensibleSettings = forceAtlas2.inferSettings(graph);
+    // console.log(sensibleSettings)
+    // forceAtlas2.assign(graph, {
+    //   iterations: 100,
+    //   settings: {
+    //     gravity: 0.05,
+    //     scalingRatio: 10,
+    //     slowDown: 7.366470447731438,
+    //     strongGravityMode: true
+    //   },
+    // });        
 
+    // graph.forEachNode((nodeId, attributes) => {
+    //   apiClient.updateNodePosition(attributes.nodeId, attributes.x, attributes.y)
+    // })
+    
     loadGraph(graph);
   });
 
   return null;
 };
 
-export const DisplayGraph = () => {
+export const DisplayGraph = () => { 
+  const { setSigmaInstance } = useContext(AppContext);
+  
+  const [sigma, setSigma] = useState<Sigma | null>(null);
+  
+  useWebSocket(sigma); 
+  
   return (
     <div className={classes.sigmaContainer}>
       <SigmaContainer
+      ref={(sigma) => {
+        setSigma(sigma);
+        setSigmaInstance(sigma);
+      }}
         settings={{
           defaultEdgeType: 'arrow',
           labelSize: 2,

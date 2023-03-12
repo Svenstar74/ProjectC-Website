@@ -8,8 +8,12 @@ import {
   setSelectedEdge,
   setSelectedNode,
 } from '../store/graphSlice';
+import { useApiClient } from '../hooks/useApiClient';
+import { setDeletedEdge, showContextMenu, showDelEdgeDialog } from '../store/uiSlice';
 
 export const GraphEvents: React.FC = () => {
+  const apiClient = useApiClient();
+  
   const selectedNode = useAppSelector((state) => state.graph.selectedNode);
   const dispatch = useAppDispatch();
 
@@ -28,14 +32,32 @@ export const GraphEvents: React.FC = () => {
     // Register the events
     registerEvents({
       downNode: (e) => {
-        if (selectedNode) {
-          sigma
-            .getGraph()
-            .removeNodeAttribute(selectedNode.node, 'highlighted');
+        if (e.event.original.button === 0) {
+          if (selectedNode) {
+            sigma
+              .getGraph()
+              .removeNodeAttribute(selectedNode.node, 'highlighted');
+          }
+  
+          setDraggedNode(e.node);
+          sigma.getGraph().setNodeAttribute(e.node, 'highlighted', true);
         }
+      },
+      rightClickNode: (e) => {
+        if (e.event.original.button === 2) {
+          dispatch(showContextMenu({ showMenu: true, menuPosition: [e.event.x, e.event.y], options: ['deleteNode', 'addEdge'], nodeId: e.node }))
+        }
+      },
+      rightClickEdge: (e) => {
+        const source = sigma.getGraph().source(e.edge);
+        const target = sigma.getGraph().target(e.edge);
 
-        setDraggedNode(e.node);
-        sigma.getGraph().setNodeAttribute(e.node, 'highlighted', true);
+        dispatch(setDeletedEdge({source, target}));
+
+        dispatch(showContextMenu({ showMenu: true, menuPosition: [e.event.x, e.event.y], options: ['deleteEdge'] }))
+    
+
+        // sigma.getGraph().dropEdge(e.edge);
       },
       mouseup: (e) => {
         if (draggedNode) {
@@ -52,6 +74,9 @@ export const GraphEvents: React.FC = () => {
             label: nodeAttributes.label,
             size: nodeAttributes.size,
           }));
+
+          // TODO: Update only if position has changed (graphology events)
+          apiClient.updateNodePosition(nodeAttributes.nodeId, nodeAttributes.x, nodeAttributes.y);
         }
       },
       mousemove: (e) => {
@@ -74,10 +99,9 @@ export const GraphEvents: React.FC = () => {
         const targetString = sigma.getGraph().getNodeAttribute(targetId, 'label');
     
         // sigma.getGraph().setEdgeAttribute(e.edge, 'color', 'red');
-
-        dispatch(setSelectedEdge([sourceString, targetString]));
+        dispatch(setSelectedEdge([sourceId, sourceString, targetId, targetString]));
       },
-      clickStage: () => {
+      clickStage: (e) => {
         if (selectedNode) {
           sigma
             .getGraph()
@@ -85,7 +109,12 @@ export const GraphEvents: React.FC = () => {
         }
 
         dispatch(clearSelectedNode());
-        dispatch(clearSelectedEdge());
+        dispatch(clearSelectedEdge());        
+      },
+      rightClickStage: (e) => {
+        if (e.event.original.button === 2) {
+          dispatch(showContextMenu({ showMenu: true, menuPosition: [e.event.x, e.event.y], options: ['addNode']}))
+        }
       },
       doubleClickStage: (e) => {
         e.preventSigmaDefault();

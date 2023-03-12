@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from './store';
+import AbstractGraph from 'graphology-types';
+import Sigma from 'sigma';
 
 interface NodeAttributes {
   node: string;
@@ -34,7 +35,7 @@ export const graphSlice = createSlice({
     },
 
     setSelectedEdge: (state, action: PayloadAction<string[]>) => {
-      if (action.payload.length === 2) {
+      if (action.payload.length === 4) {
         state.last = 'edge';
         state.selectedEdge = action.payload;
       }
@@ -51,6 +52,5 @@ export const {
   setSelectedEdge,
   clearSelectedEdge,
 } = graphSlice.actions;
-export const selectGraph = (state: RootState) => state.graph.selectedNode;
 
 export default graphSlice.reducer;
