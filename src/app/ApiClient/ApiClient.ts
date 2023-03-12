@@ -3,6 +3,7 @@ import axios from 'axios';
 import { AggregatedNodeModel, ClimateConceptModel } from '@svenstar74/business-logic';
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL ?? 'http://localhost:8000';
+console.log(baseUrl);
 
 const apiCall = async (
   method: string,
