@@ -3,9 +3,8 @@ import { StringRepresentation } from "@svenstar74/business-logic";
 import { useContext, useState } from "react";
 import { useApiClient } from "../hooks/useApiClient";
 import { AppContext } from "../store/context/AppContext";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { hideNewNodeDialog } from "../store/uiSlice";
-import classes from './NewNodeDialog.module.css';
+import { useAppDispatch, useAppSelector } from "../store/redux/hooks";
+import { hideNewNodeDialog } from "../store/redux/uiSlice";
 
 export const NewNodeDialog = ({ open }: { open: boolean }) => {
   const dispatch = useAppDispatch();
@@ -38,7 +37,6 @@ export const NewNodeDialog = ({ open }: { open: boolean }) => {
     try {
       StringRepresentation.parse(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`)
     } catch (error) {
-      console.log(error)
       return true;
     }
     
@@ -58,7 +56,7 @@ export const NewNodeDialog = ({ open }: { open: boolean }) => {
   
   return (
     <div>
-      <Dialog open={open}>
+      <Dialog open={open} onClose={() => dispatch(hideNewNodeDialog())}>
         <DialogTitle>Add New Node</DialogTitle>
         <DialogContent>
           <DialogContentText style={{marginBottom: '20px'}}>
@@ -66,53 +64,51 @@ export const NewNodeDialog = ({ open }: { open: boolean }) => {
             <br />
             Note: You cannot use underscores '_'
           </DialogContentText>
+
+          {/* Change Direction */}
           <Select
             required
-            className={classes.inputField}
             label="Change Direction"
-            margin="dense"
             fullWidth
             variant="standard"
             defaultValue='decrease'
             onChange={(event) => setCurrentChangeDirection(event.target.value)}
+            style={{ marginBottom: '20px' }}
           >
             <MenuItem value='increase'>increase</MenuItem>
             <MenuItem value='decrease'>decrease</MenuItem>
           </Select>
           <TextField
-            className={classes.inputField}
             autoFocus
             label="Type of"
-            margin="dense"
             fullWidth
             variant="standard"
             helperText="Use commas to seperate multiple values"
             onChange={(event) => setCurrentTypeOf(event.target.value)}
+            style={{ marginBottom: '20px' }}
           />
           <TextField
             required
-            className={classes.inputField}
             label="Base"
-            margin="dense"
             fullWidth
             variant="standard"
             onChange={(event) => setCurrentBase(event.target.value)}
+            style={{ marginBottom: '20px' }}
           />
           <TextField
             required
-            className={classes.inputField}
             label="Aspect Changing"
-            margin="dense"
             fullWidth
             variant="standard"
             onChange={(event) => setCurrentAspectChanging(event.target.value)}
+            style={{ marginBottom: '20px' }}
           />
 
           {error !== '' && <Alert severity='error'>{error}</Alert>}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => dispatch(hideNewNodeDialog())}>Cancel</Button>
-          <Button disabled={submitDisabled()} onClick={submitForm}>Create</Button>
+          <Button disabled={submitDisabled()} onClick={submitForm}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>

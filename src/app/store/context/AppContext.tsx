@@ -11,13 +11,9 @@ const initialValue: AppContextInitialValue = {
   setSigmaInstance: (sigma: Sigma | null) => {}
 }
 
-type AppContextProviderProps = {
-  children: React.ReactNode
-}
-
 export const AppContext = createContext(initialValue);
 
-export const AppContextProvider = ({ children }: AppContextProviderProps) => {
+export const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [globalSigmaInstance, setSigmaInstance] = useState<Sigma | null>(null);
   
   return <AppContext.Provider value={{globalSigmaInstance, setSigmaInstance}}>{children}</AppContext.Provider>

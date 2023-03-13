@@ -1,5 +1,5 @@
-import { ApiClient } from "../ApiClient/ApiClient";
-import { useAppSelector } from "../store/hooks";
+import { ApiClient } from "../services/ApiClient";
+import { useAppSelector } from "../store/redux/hooks";
 
 export const useApiClient = () => {
   const user = useAppSelector((state) => state.auth.user);

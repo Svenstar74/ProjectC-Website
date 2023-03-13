@@ -1,8 +1,8 @@
 import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material"
 import { useEffect, useState } from "react";
 import { useApiClient } from "../hooks/useApiClient";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { hideNewEdgeDialog } from "../store/uiSlice";
+import { useAppDispatch, useAppSelector } from "../store/redux/hooks";
+import { hideNewEdgeDialog } from "../store/redux/uiSlice";
 
 export const NewEdgeDialog = ({ open }: { open: boolean }) => {
   const dispatch = useAppDispatch();

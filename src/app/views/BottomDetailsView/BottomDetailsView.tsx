@@ -1,4 +1,4 @@
-import { useAppSelector } from '../store/hooks';
+import { useAppSelector } from '../../store/redux/hooks';
 import classes from './BottomDetailsView.module.css';
 import { StringRepresentationForm } from './StringRepresentationForm';
 

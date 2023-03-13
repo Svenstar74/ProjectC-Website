@@ -1,7 +1,8 @@
 import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material"
+
 import { useApiClient } from "../hooks/useApiClient";
-import { useAppDispatch, useAppSelector } from "../store/hooks"
-import { hideDelEdgeDialog } from "../store/uiSlice";
+import { useAppDispatch, useAppSelector } from "../store/redux/hooks"
+import { hideDelEdgeDialog } from "../store/redux/uiSlice";
 
 export const DelEdgeDialog = ({ open }: { open: boolean }) => {
   const apiClient = useApiClient();

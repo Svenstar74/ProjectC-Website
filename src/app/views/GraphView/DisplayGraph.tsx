@@ -14,12 +14,11 @@ import '@react-sigma/core/lib/react-sigma.min.css';
 import classes from './DisplayGraph.module.css';
 import { GraphEvents } from './GraphEvents';
 import ArrowEdgeProgram from './customPrograms/edge.arrow';
-import { useApiClient } from '../hooks/useApiClient';
-import { useWebSocket } from '../hooks/useWebSocket';
+import { useApiClient } from '../../hooks/useApiClient';
 import { useState, useContext } from 'react';
 import Sigma from 'sigma';
 import { AggregatedNodeModel } from '@svenstar74/business-logic';
-import { AppContext } from '../store/context/AppContext';
+import { AppContext } from '../../store/context/AppContext';
 
 export const LoadGraph = () => {
   const apiClient = useApiClient();
@@ -83,7 +82,7 @@ export const DisplayGraph = () => {
   
   const [sigma, setSigma] = useState<Sigma | null>(null);
   
-  useWebSocket(sigma); 
+  
   
   return (
     <div className={classes.sigmaContainer}>

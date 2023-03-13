@@ -4,7 +4,7 @@ import SaveSharpIcon from '@mui/icons-material/SaveSharp';
 import { StringRepresentation } from '@svenstar74/business-logic';
 import classes from './StringRepresentationForm.module.css';
 import { useState } from 'react';
-import { useApiClient } from '../hooks/useApiClient';
+import { useApiClient } from '../../hooks/useApiClient';
 
 export const StringRepresentationForm = ({ climateConceptId, string, type }: {
   climateConceptId: string

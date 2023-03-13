@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/redux/hooks';
 import {
   clearSelectedEdge,
   clearSelectedNode,
   setSelectedEdge,
   setSelectedNode,
-} from '../store/graphSlice';
-import { useApiClient } from '../hooks/useApiClient';
-import { setDeletedEdge, showContextMenu } from '../store/uiSlice';
+} from '../../store/redux/graphSlice';
+import { useApiClient } from '../../hooks/useApiClient';
+import { setDeletedEdge, showContextMenu } from '../../store/redux/uiSlice';
 
 export const GraphEvents: React.FC = () => {
   const apiClient = useApiClient();

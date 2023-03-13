@@ -1,7 +1,7 @@
 import { ClimateConceptModel } from '@svenstar74/business-logic';
 import { useEffect, useState } from 'react';
-import { useApiClient } from '../hooks/useApiClient';
-import { useAppSelector } from '../store/hooks';
+import { useApiClient } from '../../hooks/useApiClient';
+import { useAppSelector } from '../../store/redux/hooks';
 import classes from './DetailsViewDrawer.module.css';
 
 export const DetailsViewDrawer = () => {
