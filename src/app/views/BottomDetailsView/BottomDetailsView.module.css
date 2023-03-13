@@ -3,6 +3,8 @@
   flex-direction: column;
   gap: 20px 0;
   padding: 20px;
+  height: calc(100% - 40px);
+  overflow: auto;
 }
 
 .flex {
