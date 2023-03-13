@@ -15,8 +15,7 @@ import classes from './DisplayGraph.module.css';
 import { GraphEvents } from './GraphEvents';
 import ArrowEdgeProgram from './customPrograms/edge.arrow';
 import { useApiClient } from '../../hooks/useApiClient';
-import { useState, useContext } from 'react';
-import Sigma from 'sigma';
+import { useContext } from 'react';
 import { AggregatedNodeModel } from '@svenstar74/business-logic';
 import { AppContext } from '../../store/context/AppContext';
 
@@ -78,17 +77,12 @@ export const LoadGraph = () => {
 };
 
 export const DisplayGraph = () => { 
-  const { setSigmaInstance } = useContext(AppContext);
-  
-  const [sigma, setSigma] = useState<Sigma | null>(null);
-  
-  
+  const { setSigmaInstance } = useContext(AppContext);  
   
   return (
     <div className={classes.sigmaContainer}>
       <SigmaContainer
       ref={(sigma) => {
-        setSigma(sigma);
         setSigmaInstance(sigma);
       }}
         settings={{
