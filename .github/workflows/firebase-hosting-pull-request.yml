@@ -6,7 +6,7 @@ on:
       - production
 
 jobs:
-  build_and_preview:
+  preview_to_firebase_on_pr:
     permissions: write-all
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
