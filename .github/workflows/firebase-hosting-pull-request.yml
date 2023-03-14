@@ -1,8 +1,10 @@
 name: Deploy to Firebase on PR
+
 on:
   pull_request:
     branches:
       - production
+
 jobs:
   build_and_preview:
     permissions: write-all
