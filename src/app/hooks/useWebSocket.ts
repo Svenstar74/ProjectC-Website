@@ -9,7 +9,7 @@ export const useWebSocket = () => {
 
   // On initialization, create the web socket and define the event listener onmessage
   useEffect(() => {
-    const url = process.env.REACT_APP_WS_BASE_URL || 'ws://localhost:8000/';
+    const url = process.env.REACT_APP_WS_BASE_URL ?? '';
     const ws = new WebSocket(url + user)
 
     ws.onmessage = (event) => {
