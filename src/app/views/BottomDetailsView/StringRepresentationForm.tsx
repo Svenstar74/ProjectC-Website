@@ -3,14 +3,16 @@ import SaveSharpIcon from '@mui/icons-material/SaveSharp';
 
 import { StringRepresentation } from '@svenstar74/business-logic';
 import classes from './StringRepresentationForm.module.css';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { useApiClient } from '../../hooks/useApiClient';
 
-export const StringRepresentationForm = ({ climateConceptId, string, type }: {
+interface Props {
   climateConceptId: string
   string: string;
   type?: 'Cause' | 'Effect';
-}) => {
+}
+
+export const StringRepresentationForm: FC<Props> = ({ climateConceptId, string, type }) => {
   const apiClient = useApiClient();
 
   const stringRepresentation = StringRepresentation.parse(string);
