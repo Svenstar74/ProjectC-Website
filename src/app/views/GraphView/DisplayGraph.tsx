@@ -55,20 +55,10 @@ export const LoadGraph = () => {
     });
 
     // const sensibleSettings = forceAtlas2.inferSettings(graph);
-    // console.log(sensibleSettings)
     // forceAtlas2.assign(graph, {
-    //   iterations: 100,
-    //   settings: {
-    //     gravity: 0.05,
-    //     scalingRatio: 10,
-    //     slowDown: 7.366470447731438,
-    //     strongGravityMode: true
-    //   },
-    // });        
-
-    // graph.forEachNode((nodeId, attributes) => {
-    //   apiClient.updateNodePosition(attributes.nodeId, attributes.x, attributes.y)
-    // })
+    //   iterations: 1000,
+    //   settings: sensibleSettings,
+    // });
     
     loadGraph(graph);
   });
