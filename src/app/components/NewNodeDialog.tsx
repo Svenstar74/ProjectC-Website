@@ -37,9 +37,7 @@ export const NewNodeDialog: FC<Props> = ({ open, onClose }) => {
       return true;
     }
     
-    try {
-      StringRepresentation.parse(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`)
-    } catch (error) {
+    if (!StringRepresentation.isParsable(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`)){
       return true;
     }
     
