@@ -17,8 +17,8 @@ export const NewEdgeDialog: FC<Props> = ({ open, onClose }) => {
     return selectedValue === null;
   }
 
-  const submitForm = async () => {
-    await apiClient.addEdge(causeNode, selectedValue!);
+  const submitForm = () => {
+    apiClient.addEdge(causeNode, selectedValue!);
     onClose();
   };
 

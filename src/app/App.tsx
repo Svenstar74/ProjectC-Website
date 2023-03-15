@@ -1,6 +1,6 @@
 import classes from './App.module.css';
 import { BottomDetailsView } from './views/BottomDetailsView/BottomDetailsView';
-import { ContextMenu } from './components/ContextMenu/ContextMenu';
+import { ContextMenu } from './components/ContextMenu';
 
 import { DisplayGraph } from './views/GraphView/DisplayGraph';
 import { useWebSocket } from './hooks/useWebSocket';
