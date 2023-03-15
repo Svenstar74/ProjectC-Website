@@ -9,10 +9,6 @@ interface UiState {
 
   deletedEdgeSource: string,
   deletedEdgeTarget: string,
-  
-  showNewNodeDialog: boolean;
-  showNewEdgeDialog: boolean;
-  showDelEdgeDialog: boolean;
 }
 
 const initialState: UiState = {
@@ -24,10 +20,6 @@ const initialState: UiState = {
   
   deletedEdgeSource: '',
   deletedEdgeTarget: '',
-  
-  showNewNodeDialog: false,
-  showNewEdgeDialog: false,
-  showDelEdgeDialog: false,
 }
 
 export const uiSlice = createSlice({
@@ -51,24 +43,6 @@ export const uiSlice = createSlice({
     hideContextMenu(state) {
       state.showContextMenu = false;
     },
-    showNewNodeDialog(state) {
-      state.showNewNodeDialog = true;
-    },
-    hideNewNodeDialog(state) {
-      state.showNewNodeDialog = false;
-    },
-    showNewEdgeDialog(state) {
-      state.showNewEdgeDialog = true;
-    },
-    hideNewEdgeDialog(state) {
-      state.showNewEdgeDialog = false;
-    },
-    showDelEdgeDialog(state) {
-      state.showDelEdgeDialog = true;
-    },
-    hideDelEdgeDialog(state) {
-      state.showDelEdgeDialog = false;
-    },
   }
 })
 
@@ -76,11 +50,5 @@ export const {
   showContextMenu,
   hideContextMenu,
   setDeletedEdge,
-  showNewNodeDialog,
-  hideNewNodeDialog,
-  showNewEdgeDialog,
-  hideNewEdgeDialog,
-  showDelEdgeDialog,
-  hideDelEdgeDialog,
 } = uiSlice.actions;
 export default uiSlice.reducer;
