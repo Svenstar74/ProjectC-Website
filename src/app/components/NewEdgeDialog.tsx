@@ -1,11 +1,14 @@
 import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material"
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useApiClient } from "../hooks/useApiClient";
-import { useAppDispatch, useAppSelector } from "../store/redux/hooks";
-import { hideNewEdgeDialog } from "../store/redux/uiSlice";
+import { useAppSelector } from "../store/redux/hooks";
 
-export const NewEdgeDialog = ({ open }: { open: boolean }) => {
-  const dispatch = useAppDispatch();
+interface Props {
+  open: boolean;
+  onClose: () => void;
+}
+
+export const NewEdgeDialog: FC<Props> = ({ open, onClose }) => {
   const apiClient = useApiClient();
 
   const causeNode = useAppSelector(state => state.ui.selectedNode); 
@@ -16,7 +19,7 @@ export const NewEdgeDialog = ({ open }: { open: boolean }) => {
 
   const submitForm = async () => {
     await apiClient.addEdge(causeNode, selectedValue!);
-    dispatch(hideNewEdgeDialog());
+    onClose();
   };
 
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
@@ -56,7 +59,7 @@ export const NewEdgeDialog = ({ open }: { open: boolean }) => {
           
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => dispatch(hideNewEdgeDialog())}>Cancel</Button>
+          <Button onClick={onClose}>Cancel</Button>
           <Button disabled={submitDisabled()} onClick={submitForm}>Add</Button>
         </DialogActions>
       </Dialog>
