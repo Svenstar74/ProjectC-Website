@@ -5,11 +5,10 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 
-import { useApiClient } from '../../hooks/useApiClient';
-
-import { NewNodeDialog } from "../NewNodeDialog";
-import { NewEdgeDialog } from "../NewEdgeDialog";
-import { DelEdgeDialog } from "../DelEdgeDialog";
+import { NewNodeDialog } from "./NewNodeDialog";
+import { NewEdgeDialog } from "./NewEdgeDialog";
+import { DelEdgeDialog } from "./DelEdgeDialog";
+import { DelNodeDialog } from "./DelNodeDialog";
 
 type Props = {
   show: boolean;
@@ -18,10 +17,9 @@ type Props = {
   clickedItemId?: string;
 };
 
-export const ContextMenu: FC<Props> = ({ show, position, menuItems, clickedItemId = '' }) => {
-  const apiClient = useApiClient();
-  
+export const ContextMenu: FC<Props> = ({ show, position, menuItems, clickedItemId = '' }) => {  
   const [showNewNodeDialog, setShowNewNodeDialog] = useState(false);
+  const [showDelNodeDialog, setShowDelNodeDialog] = useState(false);
   const [showNewEdgeDialog, setShowNewEdgeDialog] = useState(false);
   const [showDelEdgeDialog, setShowDelEdgeDialog] = useState(false);
       
@@ -29,6 +27,7 @@ export const ContextMenu: FC<Props> = ({ show, position, menuItems, clickedItemI
     <div>
       {/* Show dialog when associated menu item was clicked */}
       <NewNodeDialog open={showNewNodeDialog} onClose={() => setShowNewNodeDialog(false)} />
+      <DelNodeDialog open={showDelNodeDialog} nodeToDelete={clickedItemId} onClose={() => setShowDelNodeDialog(false)} />
       <NewEdgeDialog open={showNewEdgeDialog} onClose={() => setShowNewEdgeDialog(false)} />
       <DelEdgeDialog open={showDelEdgeDialog} onClose={() => setShowDelEdgeDialog(false)} />
 
@@ -43,7 +42,7 @@ export const ContextMenu: FC<Props> = ({ show, position, menuItems, clickedItemI
             <ListItemText>New Node</ListItemText>
           </MenuItem>}
 
-          {menuItems.includes('deleteNode') && <MenuItem onClick={() => apiClient.deleteNode(clickedItemId)}>
+          {menuItems.includes('deleteNode') && <MenuItem onClick={() => setShowDelNodeDialog(true)}>
             <ListItemIcon>
               <DeleteIcon />
             </ListItemIcon>
