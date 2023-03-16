@@ -12,9 +12,8 @@ interface Props {
 
 export const NewNodeDialog: FC<Props> = ({ open, onClose }) => {
   const apiClient = useApiClient();
-  const appContext = useContext(AppContext);
+  const { globalSigmaInstance } = useContext(AppContext);
   
-
   const contextMenuPosition = useAppSelector(state => state.ui.contextMenuPosition);
 
   const [error, setError] = useState('');
@@ -46,7 +45,7 @@ export const NewNodeDialog: FC<Props> = ({ open, onClose }) => {
   
   const submitForm = async () => {
     const string = StringRepresentation.parse(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`).toString();
-    const nodePosition = appContext.globalSigmaInstance!.viewportToGraph({x: contextMenuPosition[0], y: contextMenuPosition[1]});
+    const nodePosition = globalSigmaInstance!.viewportToGraph({x: contextMenuPosition[0], y: contextMenuPosition[1]});
     const result = await apiClient.addNode(string,nodePosition.x, nodePosition.y);
     if (result === 200) {
       onClose();

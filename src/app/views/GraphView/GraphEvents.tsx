@@ -18,7 +18,7 @@ export const GraphEvents: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const registerEvents = useRegisterEvents();
-  const sigma = useSigma();
+  const sigma = useSigma();  
 
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
 
@@ -29,7 +29,6 @@ export const GraphEvents: React.FC = () => {
   }, [sigma]);
 
   useEffect(() => {
-    // Register the events
     registerEvents({
       downNode: (e) => {
         if (e.event.original.button === 0) {
@@ -121,7 +120,7 @@ export const GraphEvents: React.FC = () => {
       },
     });
     // eslint-disable-next-line
-  }, [registerEvents, sigma, draggedNode]);
+  }, [registerEvents, sigma, draggedNode, selectedNode]);
 
   return null;
 };
