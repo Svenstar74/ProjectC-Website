@@ -6,6 +6,7 @@ import { DisplayGraph } from './views/GraphView/DisplayGraph';
 import { useWebSocket } from './hooks/useWebSocket';
 import { useAppDispatch, useAppSelector } from './store/redux/hooks';
 import { hideContextMenu } from './store/redux/uiSlice';
+import { ExportButton } from './components/ExportButton';
 
 function App() {  
   const dispatch = useAppDispatch();
@@ -18,13 +19,16 @@ function App() {
   useWebSocket(); 
 
   return (
-    <div className={classes.App} onClick={() => dispatch(hideContextMenu())} onContextMenu={(e) => e.preventDefault()}>
-      <div className={classes.graphView}><DisplayGraph /></div>
-      <div className={classes.bottomDetails}><BottomDetailsView /></div>
-      
-      <ContextMenu show={showContextMenu} position={{x: contextMenuPosition[0], y: contextMenuPosition[1]}} menuItems={contextMenuOptions} clickedItemId={nodeToDelete}/>
+    <>
+      <div className={classes.app} onClick={() => dispatch(hideContextMenu())} onContextMenu={(e) => e.preventDefault()}>
+        <div className={classes.graphView}><DisplayGraph /></div>
+        <div className={classes.bottomDetails}><BottomDetailsView /></div>        
         
-    </div>
+        <ContextMenu show={showContextMenu} position={{x: contextMenuPosition[0], y: contextMenuPosition[1]}} menuItems={contextMenuOptions} clickedItemId={nodeToDelete}/>
+      </div>
+
+      <div className={classes.exportButton}><ExportButton /></div>
+    </>
   );
 }
 
