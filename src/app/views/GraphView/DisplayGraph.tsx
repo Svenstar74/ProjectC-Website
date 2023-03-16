@@ -73,7 +73,9 @@ export const DisplayGraph = () => {
     <div className={classes.sigmaContainer}>
       <SigmaContainer
       ref={(sigma) => {
-        setSigmaInstance(sigma);
+        if (sigma) {
+          setSigmaInstance(sigma);
+        }
       }}
         settings={{
           defaultEdgeType: 'arrow',
