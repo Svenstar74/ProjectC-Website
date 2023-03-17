@@ -4,7 +4,6 @@ interface UiState {
   showContextMenu: boolean;
   contextMenuOptions: string[];
   contextMenuPosition: number[];
-  nodeToAdd: number[];
   selectedNode: string;
 
   deletedEdgeSource: string,
@@ -15,7 +14,6 @@ const initialState: UiState = {
   showContextMenu: false,
   contextMenuOptions: [],
   contextMenuPosition: [],
-  nodeToAdd: [],
   selectedNode: '',
   
   deletedEdgeSource: '',

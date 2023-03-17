@@ -9,18 +9,23 @@ import {
   setSelectedEdge,
   setSelectedNode,
 } from '../../store/redux/graphSlice';
-import { setDeletedEdge, showContextMenu } from '../../store/redux/uiSlice';
+import { setDeletedEdge } from '../../store/redux/uiSlice';
+import { ContextMenu } from '../../components/ContextMenu';
 
 export const GraphEvents = () => {
   const apiClient = useApiClient();
+  const sigma = useSigma();  
+  const registerEvents = useRegisterEvents();
   
   const selectedNode = useAppSelector((state) => state.graph.selectedNode);
   const dispatch = useAppDispatch();
 
-  const registerEvents = useRegisterEvents();
-  const sigma = useSigma();  
-
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
+
+  const [showContextMenu, setShowContextMenu] = useState(false);
+  const [contextMenuPosition, setContextMenuPosition] = useState({x: 0, y: 0});
+  const [contextMenuOptions, setContextMenuOptions] = useState<string[]>([]);
+  const [nodeToDelete, setNodeToDelete] = useState('');
 
   // When zooming in or out, change the node labels font size
   useEffect(() => {
@@ -44,9 +49,10 @@ export const GraphEvents = () => {
         }
       },
       rightClickNode: (e) => {
-        if (e.event.original.button === 2) {
-          dispatch(showContextMenu({ showMenu: true, menuPosition: [e.event.x, e.event.y], options: ['deleteNode', 'addEdge'], nodeId: e.node }))
-        }
+        setShowContextMenu(true)
+        setContextMenuPosition({ x: e.event.x, y: e.event.y });
+        setContextMenuOptions(['deleteNode', 'addEdge']);
+        setNodeToDelete(e.node);
       },
       rightClickEdge: (e) => {
         const source = sigma.getGraph().source(e.edge);
@@ -54,12 +60,13 @@ export const GraphEvents = () => {
 
         dispatch(setDeletedEdge({source, target}));
 
-        dispatch(showContextMenu({ showMenu: true, menuPosition: [e.event.x, e.event.y], options: ['deleteEdge'] }))
-    
+        setShowContextMenu(true)
+        setContextMenuPosition({ x: e.event.x, y: e.event.y });
+        setContextMenuOptions(['deleteEdge']);    
 
         // sigma.getGraph().dropEdge(e.edge);
       },
-      mouseup: (e) => {
+      mouseup: () => {
         if (draggedNode) {
           setDraggedNode(null);
 
@@ -98,10 +105,9 @@ export const GraphEvents = () => {
         const sourceString = sigma.getGraph().getNodeAttribute(sourceId, 'label');
         const targetString = sigma.getGraph().getNodeAttribute(targetId, 'label');
     
-        // sigma.getGraph().setEdgeAttribute(e.edge, 'color', 'red');
         dispatch(setSelectedEdge([sourceId, sourceString, targetId, targetString]));
       },
-      clickStage: (e) => {
+      clickStage: () => {
         if (selectedNode) {
           sigma
             .getGraph()
@@ -112,7 +118,9 @@ export const GraphEvents = () => {
         dispatch(clearSelectedEdge());        
       },
       rightClickStage: (e) => {
-          dispatch(showContextMenu({ showMenu: true, menuPosition: [e.event.x, e.event.y], options: ['addNode']}))
+        setShowContextMenu(true)
+        setContextMenuPosition({ x: e.event.x, y: e.event.y });
+        setContextMenuOptions(['addNode']);
       },
       doubleClickStage: (e) => {
         // Do not zoom in with double clicks
@@ -122,5 +130,7 @@ export const GraphEvents = () => {
     // eslint-disable-next-line
   }, [registerEvents, sigma, draggedNode, selectedNode]);
 
-  return null;
+  return (
+    <ContextMenu show={showContextMenu} position={contextMenuPosition} menuItems={contextMenuOptions} onClose={() => setShowContextMenu(false)} clickedItemId={nodeToDelete} />
+  );
 };

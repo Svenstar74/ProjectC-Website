@@ -54,7 +54,7 @@ export const LoadGraph = () => {
       
       loadGraph(graph);
     });
-  // eslint-disable-next-line
+  // eslint-disable-next
   }, []);
   
   return null;

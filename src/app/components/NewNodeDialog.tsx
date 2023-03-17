@@ -8,13 +8,12 @@ import { useAppSelector } from "../store/redux/hooks";
 interface Props {
   open: boolean;
   onClose: () => void;
+  position: {x: number, y: number};
 }
 
-export const NewNodeDialog: FC<Props> = ({ open, onClose }) => {
+export const NewNodeDialog: FC<Props> = ({ open, onClose, position }) => {
   const apiClient = useApiClient();
   const { globalSigmaInstance } = useContext(AppContext);
-  
-  const contextMenuPosition = useAppSelector(state => state.ui.contextMenuPosition);
 
   const [error, setError] = useState('');
   
@@ -45,7 +44,7 @@ export const NewNodeDialog: FC<Props> = ({ open, onClose }) => {
   
   const submitForm = async () => {
     const string = StringRepresentation.parse(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`).toString();
-    const nodePosition = globalSigmaInstance!.viewportToGraph({x: contextMenuPosition[0], y: contextMenuPosition[1]});
+    const nodePosition = globalSigmaInstance!.viewportToGraph(position);
     const result = await apiClient.addNode(string,nodePosition.x, nodePosition.y);
     if (result === 200) {
       onClose();
