@@ -14,15 +14,14 @@ export const useWebSocket = () => {
     const ws = new WebSocket(url + user)
     console.log("New Websocket with id " + user)
     
-    ws.onopen = (event) => { console.log("Websocket connection opened, ready for listening") }
-    ws.onclose = (event) => {
+    ws.onopen = () => { console.log("Websocket connection opened, ready for listening") }
+    ws.onclose = () => {
       console.log("Websocket connection closed, attempting to reconnect ...")
       setTimeout(() => connect(), 5000);
     }
-    ws.onerror = (event) => { console.log("Websocket encountered an error") }
+    ws.onerror = () => { console.log("Websocket encountered an error") }
     
     ws.onmessage = (event) => {
-      console.log(appContext.globalSigmaInstance)
       const data = JSON.parse(event.data);
       switch (data.eventType) {
         case 'AddedNode':

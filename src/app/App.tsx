@@ -6,7 +6,7 @@ import { DisplayGraph } from './views/GraphView/DisplayGraph';
 import { useWebSocket } from './hooks/useWebSocket';
 import { useAppDispatch, useAppSelector } from './store/redux/hooks';
 import { hideContextMenu } from './store/redux/uiSlice';
-import { ExportButton } from './components/ExportButton';
+import { HamburgerMenu } from './components/HamburgerMenu';
 
 function App() {  
   const dispatch = useAppDispatch();
@@ -27,7 +27,7 @@ function App() {
         <ContextMenu show={showContextMenu} position={{x: contextMenuPosition[0], y: contextMenuPosition[1]}} menuItems={contextMenuOptions} clickedItemId={nodeToDelete}/>
       </div>
 
-      <div className={classes.exportButton}><ExportButton /></div>
+      <div className={classes.hamburgerMenu}><HamburgerMenu /></div>
     </>
   );
 }

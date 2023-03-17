@@ -23,8 +23,8 @@
   z-index: 10;
 }
 
-.exportButton {
+.hamburgerMenu {
   position: absolute;
-  left: 20px;
+  right: 60px;
   top: 10px;
 }
