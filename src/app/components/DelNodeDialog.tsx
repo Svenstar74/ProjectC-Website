@@ -2,32 +2,29 @@ import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material"
 import { FC } from "react";
 
 import { useApiClient } from "../hooks/useApiClient";
-import { useAppSelector } from "../store/redux/hooks"
 
 interface Props {
   open: boolean;
+  nodeToDelete: string;
   onClose: () => void;
 }
 
-export const DelEdgeDialog: FC<Props> = ({ open , onClose}) => {
+export const DelNodeDialog: FC<Props> = ({ open, nodeToDelete, onClose}) => {
   const apiClient = useApiClient();
   
-  const deletedEdgeSource = useAppSelector(state => state.ui.deletedEdgeSource);
-  const deletedEdgeTarget = useAppSelector(state => state.ui.deletedEdgeTarget);
-  
-  const deleteEdge = () => {
-    apiClient.deleteEdge(deletedEdgeSource, deletedEdgeTarget);
+  const deleteNode = () => {
+    apiClient.deleteNode(nodeToDelete)
     onClose();
   }
   
   return (
     <Dialog open={open}>
       <DialogTitle>
-        Delete Edge?
+        Are you sure you want to delete this node?
       </DialogTitle>
       <DialogActions>
         <Button onClick={onClose}>No</Button>
-        <Button onClick={deleteEdge} autoFocus>
+        <Button onClick={deleteNode} autoFocus>
           Yes
         </Button>
       </DialogActions>

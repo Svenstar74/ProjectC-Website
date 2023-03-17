@@ -1,4 +1,4 @@
-.App {
+.app {
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -21,4 +21,10 @@
   height: 30vh;
   box-shadow: black 0px 3px 10px;
   z-index: 10;
+}
+
+.hamburgerMenu {
+  position: absolute;
+  right: 60px;
+  top: 10px;
 }

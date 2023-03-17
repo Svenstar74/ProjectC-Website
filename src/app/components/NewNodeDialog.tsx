@@ -1,17 +1,19 @@
+import { FC, useContext, useState } from "react";
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Select, TextField } from "@mui/material";
 import { StringRepresentation } from "@svenstar74/business-logic";
-import { useContext, useState } from "react";
 import { useApiClient } from "../hooks/useApiClient";
 import { AppContext } from "../store/context/AppContext";
-import { useAppDispatch, useAppSelector } from "../store/redux/hooks";
-import { hideNewNodeDialog } from "../store/redux/uiSlice";
+import { useAppSelector } from "../store/redux/hooks";
 
-export const NewNodeDialog = ({ open }: { open: boolean }) => {
-  const dispatch = useAppDispatch();
+interface Props {
+  open: boolean;
+  onClose: () => void;
+}
+
+export const NewNodeDialog: FC<Props> = ({ open, onClose }) => {
   const apiClient = useApiClient();
-  const appContext = useContext(AppContext);
+  const { globalSigmaInstance } = useContext(AppContext);
   
-
   const contextMenuPosition = useAppSelector(state => state.ui.contextMenuPosition);
 
   const [error, setError] = useState('');
@@ -34,9 +36,7 @@ export const NewNodeDialog = ({ open }: { open: boolean }) => {
       return true;
     }
     
-    try {
-      StringRepresentation.parse(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`)
-    } catch (error) {
+    if (!StringRepresentation.isParsable(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`)){
       return true;
     }
     
@@ -45,10 +45,10 @@ export const NewNodeDialog = ({ open }: { open: boolean }) => {
   
   const submitForm = async () => {
     const string = StringRepresentation.parse(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`).toString();
-    const nodePosition = appContext.globalSigmaInstance!.viewportToGraph({x: contextMenuPosition[0], y: contextMenuPosition[1]});
+    const nodePosition = globalSigmaInstance!.viewportToGraph({x: contextMenuPosition[0], y: contextMenuPosition[1]});
     const result = await apiClient.addNode(string,nodePosition.x, nodePosition.y);
     if (result === 200) {
-      dispatch(hideNewNodeDialog());
+      onClose();
     } else {
       setError('Error while creating the node.')
     }
@@ -56,7 +56,7 @@ export const NewNodeDialog = ({ open }: { open: boolean }) => {
   
   return (
     <div>
-      <Dialog open={open} onClose={() => dispatch(hideNewNodeDialog())}>
+      <Dialog open={open} onClose={onClose}>
         <DialogTitle>Add New Node</DialogTitle>
         <DialogContent>
           <DialogContentText style={{marginBottom: '20px'}}>
@@ -107,7 +107,7 @@ export const NewNodeDialog = ({ open }: { open: boolean }) => {
           {error !== '' && <Alert severity='error'>{error}</Alert>}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => dispatch(hideNewNodeDialog())}>Cancel</Button>
+          <Button onClick={onClose}>Cancel</Button>
           <Button disabled={submitDisabled()} onClick={submitForm}>Add</Button>
         </DialogActions>
       </Dialog>
