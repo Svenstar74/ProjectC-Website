@@ -28,3 +28,9 @@
   right: 60px;
   top: 10px;
 }
+
+.toolbar {
+  position: absolute;
+  right: 10px;
+  top: 200px;
+}

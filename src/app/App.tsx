@@ -7,6 +7,7 @@ import { useWebSocket } from './hooks/useWebSocket';
 import { useAppDispatch, useAppSelector } from './store/redux/hooks';
 import { hideContextMenu } from './store/redux/uiSlice';
 import { HamburgerMenu } from './components/HamburgerMenu';
+import { Toolbar } from './components/Toolbar';
 
 function App() {  
   const dispatch = useAppDispatch();
@@ -28,6 +29,7 @@ function App() {
       </div>
 
       <div className={classes.hamburgerMenu}><HamburgerMenu /></div>
+      <div className={classes.toolbar}><Toolbar /></div>
     </>
   );
 }
