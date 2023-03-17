@@ -31,7 +31,7 @@ export const ContextMenu: FC<Props> = ({ show, position, menuItems, clickedItemI
       <NewEdgeDialog open={showNewEdgeDialog} onClose={() => setShowNewEdgeDialog(false)} />
       <DelEdgeDialog open={showDelEdgeDialog} onClose={() => setShowDelEdgeDialog(false)} />
 
-      {/* Show the dialog itself */}
+      {/* Show the menu itself */}
       {show && <Paper style={{ position: 'absolute', left: position.x, top: position.y, zIndex: '100'}}>
         <MenuList>       
 

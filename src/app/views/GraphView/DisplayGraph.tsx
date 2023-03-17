@@ -1,70 +1,19 @@
-import Graph from 'graphology';
+import { useContext } from 'react';
 
 import {
   ControlsContainer,
   FullScreenControl,
   SearchControl,
   SigmaContainer,
-  useLoadGraph,
   ZoomControl,
 } from '@react-sigma/core';
-
 import '@react-sigma/core/lib/react-sigma.min.css';
 
-import classes from './DisplayGraph.module.css';
+import { LoadGraph } from './LoadGraph';
 import { GraphEvents } from './GraphEvents';
 import ArrowEdgeProgram from './customPrograms/edge.arrow';
-import { useApiClient } from '../../hooks/useApiClient';
-import { useContext } from 'react';
-import { AggregatedNodeModel } from '@svenstar74/business-logic';
 import { AppContext } from '../../store/context/AppContext';
-
-export const LoadGraph = () => {
-  const apiClient = useApiClient();
-  const loadGraph = useLoadGraph();
-
-  apiClient.getAllNodesAggregated().then((data) => {
-    const graph = new Graph({
-      allowSelfLoops: false,
-      multi: false,
-      type: 'directed',
-    });
-
-    data.forEach((node: AggregatedNodeModel) => {
-      graph.addNode(node.climateConcept.id, {
-        nodeId: node.id,
-        x: node.x,
-        y: node.y,
-        label: node.climateConcept.stringRepresentation,
-        forceLabel: true,
-      });
-    });
-
-    data.forEach((node: AggregatedNodeModel) => {
-      node.climateConcept.incomingConnections.forEach((connection: string) => {
-        try {
-          graph.addEdge(connection, node.climateConcept.id, { size: 2 });
-        } catch {}
-      });
-
-      node.climateConcept.outgoingConnections.forEach((connection: string) => {
-        try {
-          graph.addEdge(node.climateConcept.id, connection, { size: 2 });
-        } catch {}
-      });
-    });
-
-    // const sensibleSettings = forceAtlas2.inferSettings(graph);
-    // forceAtlas2.assign(graph, {
-    //   iterations: 1000,
-    //   settings: sensibleSettings,
-    // });
-    
-    loadGraph(graph);
-  });
-
-  return null;
-};
+import classes from './DisplayGraph.module.css';
 
 export const DisplayGraph = () => { 
   const { setSigmaInstance } = useContext(AppContext);  
@@ -72,21 +21,15 @@ export const DisplayGraph = () => {
   return (
     <div className={classes.sigmaContainer}>
       <SigmaContainer
-      ref={(sigma) => {
-        if (sigma) {
-          setSigmaInstance(sigma);
-        }
-      }}
+        ref={(sigma) => {
+          if (sigma) {
+            setSigmaInstance(sigma);
+          }
+        }}
         settings={{
           defaultEdgeType: 'arrow',
           labelSize: 2,
           edgeProgramClasses: { arrow: ArrowEdgeProgram },
-          // nodeProgramClasses: {
-          //   border: NodeProgramBorder
-          // }
-          // labelRenderer(context, data, settings) {
-          //   drawLabel(context, data, settings)
-          // },
         }}
         style={{ width: '100%', height: '100%' }}
       >

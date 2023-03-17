@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { useApiClient } from '../../hooks/useApiClient';
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 import { useAppDispatch, useAppSelector } from '../../store/redux/hooks';
 import {
@@ -8,10 +9,9 @@ import {
   setSelectedEdge,
   setSelectedNode,
 } from '../../store/redux/graphSlice';
-import { useApiClient } from '../../hooks/useApiClient';
 import { setDeletedEdge, showContextMenu } from '../../store/redux/uiSlice';
 
-export const GraphEvents: React.FC = () => {
+export const GraphEvents = () => {
   const apiClient = useApiClient();
   
   const selectedNode = useAppSelector((state) => state.graph.selectedNode);
@@ -22,6 +22,7 @@ export const GraphEvents: React.FC = () => {
 
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
 
+  // When zooming in or out, change the node labels font size
   useEffect(() => {
     sigma.getCamera().on('updated', (state) => {
       sigma.setSetting('labelSize', Math.min(2 / state.ratio, 20));
@@ -111,11 +112,10 @@ export const GraphEvents: React.FC = () => {
         dispatch(clearSelectedEdge());        
       },
       rightClickStage: (e) => {
-        if (e.event.original.button === 2) {
           dispatch(showContextMenu({ showMenu: true, menuPosition: [e.event.x, e.event.y], options: ['addNode']}))
-        }
       },
       doubleClickStage: (e) => {
+        // Do not zoom in with double clicks
         e.preventSigmaDefault();
       },
     });
