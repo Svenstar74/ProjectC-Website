@@ -7,7 +7,9 @@ import App from './app/App';
 import { store } from './app/store/redux/store';
 import { AppContextProvider } from './app/store/context/AppContext';
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+);
 
 root.render(
   <Provider store={store}>
