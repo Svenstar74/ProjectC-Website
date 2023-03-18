@@ -1,12 +1,6 @@
 import { useContext } from 'react';
 
-import {
-  ControlsContainer,
-  FullScreenControl,
-  SearchControl,
-  SigmaContainer,
-  ZoomControl,
-} from '@react-sigma/core';
+import { ControlsContainer, FullScreenControl, SearchControl, SigmaContainer, ZoomControl } from '@react-sigma/core';
 import '@react-sigma/core/lib/react-sigma.min.css';
 
 import { LoadGraph } from './LoadGraph';
@@ -15,9 +9,9 @@ import ArrowEdgeProgram from './customPrograms/edge.arrow';
 import { AppContext } from '../../store/context/AppContext';
 import classes from './DisplayGraph.module.css';
 
-export const DisplayGraph = () => { 
-  const { setSigmaInstance } = useContext(AppContext);  
-  
+export const DisplayGraph = () => {
+  const { setSigmaInstance } = useContext(AppContext);
+
   return (
     <div className={classes.sigmaContainer}>
       <SigmaContainer
@@ -35,11 +29,11 @@ export const DisplayGraph = () => {
       >
         <GraphEvents />
         <LoadGraph />
-        <ControlsContainer position='top-right'>
+        <ControlsContainer position="top-right">
           <ZoomControl />
           <FullScreenControl />
         </ControlsContainer>
-        <ControlsContainer position='bottom-right'>
+        <ControlsContainer position="bottom-right">
           <SearchControl style={{ width: '200px' }} />
         </ControlsContainer>
       </SigmaContainer>

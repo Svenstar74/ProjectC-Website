@@ -6,8 +6,8 @@ import { useWebSocket } from './hooks/useWebSocket';
 import { HamburgerMenu } from './components/HamburgerMenu';
 import { Toolbar } from './components/Toolbar';
 
-function App() {    
-  useWebSocket(); 
+function App() {
+  useWebSocket();
 
   return (
     <>

@@ -2,11 +2,11 @@ import { useAppSelector } from '../../store/redux/hooks';
 import classes from './BottomDetailsView.module.css';
 import { StringRepresentationForm } from './StringRepresentationForm';
 
-export const BottomDetailsView = () => {  
+export const BottomDetailsView = () => {
   const last = useAppSelector((state) => state.graph.last);
   const selectedNode = useAppSelector((state) => state.graph.selectedNode);
   const selectedEdge = useAppSelector((state) => state.graph.selectedEdge);
-  
+
   return (
     <div className={classes.container}>
       {selectedNode && last === 'node' && <div className={classes.flex}>

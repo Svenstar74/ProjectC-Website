@@ -1,7 +1,7 @@
-import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material"
-import { FC, useEffect, useState } from "react";
-import { useApiClient } from "../hooks/useApiClient";
-import { useAppSelector } from "../store/redux/hooks";
+import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
+import { FC, useEffect, useState } from 'react';
+import { useApiClient } from '../hooks/useApiClient';
+import { useAppSelector } from '../store/redux/hooks';
 
 interface Props {
   open: boolean;
@@ -11,11 +11,11 @@ interface Props {
 export const NewEdgeDialog: FC<Props> = ({ open, onClose }) => {
   const apiClient = useApiClient();
 
-  const causeNode = useAppSelector(state => state.ui.selectedNode); 
-  
+  const causeNode = useAppSelector((state) => state.ui.selectedNode);
+
   const submitDisabled = () => {
     return selectedValue === null;
-  }
+  };
 
   const submitForm = () => {
     apiClient.addEdge(causeNode, selectedValue!);
@@ -31,32 +31,26 @@ export const NewEdgeDialog: FC<Props> = ({ open, onClose }) => {
     });
 
     // eslint-disable-next-line
-  }, [])
-  
+  }, []);
+
   return (
     <div>
       <Dialog open={open}>
         <DialogTitle>Add New Edge</DialogTitle>
         <DialogContent>
-          <DialogContentText style={{marginBottom: '20px'}}>
+          <DialogContentText style={{ marginBottom: '20px' }}>
             Enter the string representation of the node you want to connect to.
           </DialogContentText>
-  
+
           <Autocomplete
             fullWidth
             options={stringRepresentations}
             autoHighlight
             renderInput={(params) => (
-              <TextField
-                autoFocus
-                {...params}
-                label="Choose an Effect"
-              />
+              <TextField autoFocus {...params} label="Choose an Effect" />
             )}
             onChange={(event, value) => setSelectedValue(value)}
           />
-
-          
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
@@ -64,5 +58,5 @@ export const NewEdgeDialog: FC<Props> = ({ open, onClose }) => {
         </DialogActions>
       </Dialog>
     </div>
-  )
-}
+  );
+};

@@ -1,14 +1,14 @@
-import Graph from "graphology";
-import { useLoadGraph } from "@react-sigma/core";
+import { useEffect } from 'react';
+import Graph from 'graphology';
+import { useLoadGraph } from '@react-sigma/core';
 
-import { useApiClient } from "../../hooks/useApiClient";
-import { AggregatedNodeModel } from "@svenstar74/business-logic";
-import { useEffect } from "react";
+import { AggregatedNodeModel } from '@svenstar74/business-logic';
+import { useApiClient } from '../../hooks/useApiClient';
 
 export const LoadGraph = () => {
   const apiClient = useApiClient();
   const loadGraph = useLoadGraph();
-  
+
   useEffect(() => {
     // Fetch all nodes from the api
     apiClient.getAllNodesAggregated().then((data) => {
@@ -32,17 +32,21 @@ export const LoadGraph = () => {
 
       // Again for each node, add the connections in the graph
       data.forEach((node: AggregatedNodeModel) => {
-        node.climateConcept.incomingConnections.forEach((connection: string) => {
-          try {
-            graph.addEdge(connection, node.climateConcept.id, { size: 2 });
-          } catch {}
-        });
-  
-        node.climateConcept.outgoingConnections.forEach((connection: string) => {
-          try {
-            graph.addEdge(node.climateConcept.id, connection, { size: 2 });
-          } catch {}
-        });
+        node.climateConcept.incomingConnections.forEach(
+          (connection: string) => {
+            try {
+              graph.addEdge(connection, node.climateConcept.id, { size: 2 });
+            } catch {}
+          }
+        );
+
+        node.climateConcept.outgoingConnections.forEach(
+          (connection: string) => {
+            try {
+              graph.addEdge(node.climateConcept.id, connection, { size: 2 });
+            } catch {}
+          }
+        );
       });
 
       /** With the snippet below, you can reinitialize the positions of each node. */
@@ -51,11 +55,11 @@ export const LoadGraph = () => {
       //   iterations: 1000,
       //   settings: sensibleSettings,
       // });
-      
+
       loadGraph(graph);
     });
-  // eslint-disable-next
+    // eslint-disable-next
   }, []);
-  
+
   return null;
 };

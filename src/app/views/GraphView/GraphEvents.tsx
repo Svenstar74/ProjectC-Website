@@ -3,20 +3,15 @@ import { useEffect, useState } from 'react';
 import { useApiClient } from '../../hooks/useApiClient';
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 import { useAppDispatch, useAppSelector } from '../../store/redux/hooks';
-import {
-  clearSelectedEdge,
-  clearSelectedNode,
-  setSelectedEdge,
-  setSelectedNode,
-} from '../../store/redux/graphSlice';
+import { clearSelectedEdge, clearSelectedNode, setSelectedEdge, setSelectedNode } from '../../store/redux/graphSlice';
 import { setDeletedEdge } from '../../store/redux/uiSlice';
 import { ContextMenu } from '../../components/ContextMenu';
 
 export const GraphEvents = () => {
   const apiClient = useApiClient();
-  const sigma = useSigma();  
+  const sigma = useSigma();
   const registerEvents = useRegisterEvents();
-  
+
   const selectedNode = useAppSelector((state) => state.graph.selectedNode);
   const dispatch = useAppDispatch();
 
@@ -43,13 +38,13 @@ export const GraphEvents = () => {
               .getGraph()
               .removeNodeAttribute(selectedNode.node, 'highlighted');
           }
-  
+
           setDraggedNode(e.node);
           sigma.getGraph().setNodeAttribute(e.node, 'highlighted', true);
         }
       },
       rightClickNode: (e) => {
-        setShowContextMenu(true)
+        setShowContextMenu(true);
         setContextMenuPosition({ x: e.event.x, y: e.event.y });
         setContextMenuOptions(['deleteNode', 'addEdge']);
         setNodeToDelete(e.node);
@@ -58,11 +53,11 @@ export const GraphEvents = () => {
         const source = sigma.getGraph().source(e.edge);
         const target = sigma.getGraph().target(e.edge);
 
-        dispatch(setDeletedEdge({source, target}));
+        dispatch(setDeletedEdge({ source, target }));
 
-        setShowContextMenu(true)
+        setShowContextMenu(true);
         setContextMenuPosition({ x: e.event.x, y: e.event.y });
-        setContextMenuOptions(['deleteEdge']);    
+        setContextMenuOptions(['deleteEdge']);
 
         // sigma.getGraph().dropEdge(e.edge);
       },
@@ -74,16 +69,22 @@ export const GraphEvents = () => {
             .getGraph()
             .getNodeAttributes(draggedNode);
 
-          dispatch(setSelectedNode({
-            node: draggedNode,
-            x: nodeAttributes.x,
-            y: nodeAttributes.y,
-            label: nodeAttributes.label,
-            size: nodeAttributes.size,
-          }));
+          dispatch(
+            setSelectedNode({
+              node: draggedNode,
+              x: nodeAttributes.x,
+              y: nodeAttributes.y,
+              label: nodeAttributes.label,
+              size: nodeAttributes.size,
+            })
+          );
 
-          // TODO: Update only if position has changed (graphology events)
-          apiClient.updateNodePosition(nodeAttributes.nodeId, nodeAttributes.x, nodeAttributes.y);
+          // TODO: Update only if position has changed
+          apiClient.updateNodePosition(
+            nodeAttributes.nodeId,
+            nodeAttributes.x,
+            nodeAttributes.y
+          );
         }
       },
       mousemove: (e) => {
@@ -115,10 +116,10 @@ export const GraphEvents = () => {
         }
 
         dispatch(clearSelectedNode());
-        dispatch(clearSelectedEdge());        
+        dispatch(clearSelectedEdge());
       },
       rightClickStage: (e) => {
-        setShowContextMenu(true)
+        setShowContextMenu(true);
         setContextMenuPosition({ x: e.event.x, y: e.event.y });
         setContextMenuOptions(['addNode']);
       },
@@ -131,6 +132,12 @@ export const GraphEvents = () => {
   }, [registerEvents, sigma, draggedNode, selectedNode]);
 
   return (
-    <ContextMenu show={showContextMenu} position={contextMenuPosition} menuItems={contextMenuOptions} onClose={() => setShowContextMenu(false)} clickedItemId={nodeToDelete} />
+    <ContextMenu
+      show={showContextMenu}
+      position={contextMenuPosition}
+      menuItems={contextMenuOptions}
+      onClose={() => setShowContextMenu(false)}
+      clickedItemId={nodeToDelete}
+    />
   );
 };

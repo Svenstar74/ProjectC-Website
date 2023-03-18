@@ -5,14 +5,14 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: Math.random().toString().replace('0.', '')
-}
+  user: Math.random().toString().replace('0.', ''),
+};
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {}
-})
+  reducers: {},
+});
 
 // export const {} = authSlice.actions;
 export default authSlice.reducer;
