@@ -4,7 +4,6 @@ import { useApiClient } from '../../hooks/useApiClient';
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 import { useAppDispatch, useAppSelector } from '../../store/redux/hooks';
 import { clearSelectedEdge, clearSelectedNode, setSelectedEdge, setSelectedNode } from '../../store/redux/graphSlice';
-import { setDeletedEdge } from '../../store/redux/uiSlice';
 import { ContextMenu } from '../../components/ContextMenu';
 
 export const GraphEvents = () => {
@@ -20,7 +19,8 @@ export const GraphEvents = () => {
   const [showContextMenu, setShowContextMenu] = useState(false);
   const [contextMenuPosition, setContextMenuPosition] = useState({x: 0, y: 0});
   const [contextMenuOptions, setContextMenuOptions] = useState<string[]>([]);
-  const [nodeToDelete, setNodeToDelete] = useState('');
+  const [clickedNodeId, setClickedNodeId] = useState('');
+  const [clickedEdgeNodeIds, setClickedEdgeNodeIds] = useState({ cause: '', effect: '' });
 
   // When zooming in or out, change the node labels font size
   useEffect(() => {
@@ -47,19 +47,16 @@ export const GraphEvents = () => {
         setShowContextMenu(true);
         setContextMenuPosition({ x: e.event.x, y: e.event.y });
         setContextMenuOptions(['deleteNode', 'addEdge']);
-        setNodeToDelete(e.node);
+        setClickedNodeId(e.node);
       },
       rightClickEdge: (e) => {
         const source = sigma.getGraph().source(e.edge);
         const target = sigma.getGraph().target(e.edge);
 
-        dispatch(setDeletedEdge({ source, target }));
-
         setShowContextMenu(true);
         setContextMenuPosition({ x: e.event.x, y: e.event.y });
         setContextMenuOptions(['deleteEdge']);
-
-        // sigma.getGraph().dropEdge(e.edge);
+        setClickedEdgeNodeIds({ cause: source, effect: target });
       },
       mouseup: () => {
         if (draggedNode) {
@@ -137,7 +134,8 @@ export const GraphEvents = () => {
       position={contextMenuPosition}
       menuItems={contextMenuOptions}
       onClose={() => setShowContextMenu(false)}
-      clickedItemId={nodeToDelete}
+      clickedNodeId={clickedNodeId}
+      clickedEdgeNodeIds={clickedEdgeNodeIds}
     />
   );
 };

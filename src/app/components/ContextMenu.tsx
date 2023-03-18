@@ -14,7 +14,8 @@ type Props = {
   show: boolean;
   position: { x: number; y: number };
   menuItems: string[];
-  clickedItemId?: string;
+  clickedNodeId?: string;
+  clickedEdgeNodeIds?: { cause: string; effect: string };
   onClose: () => void;
 };
 
@@ -22,7 +23,8 @@ export const ContextMenu: FC<Props> = ({
   show,
   position,
   menuItems,
-  clickedItemId = '',
+  clickedNodeId = '',
+  clickedEdgeNodeIds = { cause: '', effect: '' },
   onClose,
 }) => {
   const [showNewNodeDialog, setShowNewNodeDialog] = useState(false);
@@ -41,15 +43,18 @@ export const ContextMenu: FC<Props> = ({
       <DelNodeDialog
         open={showDelNodeDialog}
         onClose={() => setShowDelNodeDialog(false)}
-        nodeToDelete={clickedItemId}
+        nodeToDelete={clickedNodeId}
       />
       <NewEdgeDialog
         open={showNewEdgeDialog}
         onClose={() => setShowNewEdgeDialog(false)}
+        causeNodeId={clickedNodeId}
       />
       <DelEdgeDialog
         open={showDelEdgeDialog}
         onClose={() => setShowDelEdgeDialog(false)}
+        deletedEdgeSource={clickedEdgeNodeIds.cause}
+        deletedEdgeTarget={clickedEdgeNodeIds.effect}
       />
 
       {/* Show the menu itself */}

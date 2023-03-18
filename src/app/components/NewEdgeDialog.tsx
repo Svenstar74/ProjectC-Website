@@ -6,19 +6,18 @@ import { useAppSelector } from '../store/redux/hooks';
 interface Props {
   open: boolean;
   onClose: () => void;
+  causeNodeId: string;
 }
 
-export const NewEdgeDialog: FC<Props> = ({ open, onClose }) => {
+export const NewEdgeDialog: FC<Props> = ({ open, onClose, causeNodeId }) => {
   const apiClient = useApiClient();
-
-  const causeNode = useAppSelector((state) => state.ui.selectedNode);
 
   const submitDisabled = () => {
     return selectedValue === null;
   };
 
   const submitForm = () => {
-    apiClient.addEdge(causeNode, selectedValue!);
+    apiClient.addEdge(causeNodeId, selectedValue!);
     onClose();
   };
 
