@@ -1,13 +1,13 @@
+import { FC, useState } from 'react';
 import { IconButton, TextField, Tooltip } from '@mui/material';
 import SaveSharpIcon from '@mui/icons-material/SaveSharp';
 
 import { StringRepresentation } from '@svenstar74/business-logic';
-import classes from './StringRepresentationForm.module.css';
-import { FC, useState } from 'react';
 import { useApiClient } from '../../hooks/useApiClient';
+import classes from './StringRepresentationForm.module.css';
 
 interface Props {
-  climateConceptId: string
+  climateConceptId: string;
   string: string;
   type?: 'Cause' | 'Effect';
 }
@@ -21,21 +21,22 @@ export const StringRepresentationForm: FC<Props> = ({ climateConceptId, string, 
   const [currentTypeOf, setCurrentTypeOf] = useState(stringRepresentation.typeOf.toString());
   const [currentBase, setCurrentBase] = useState(stringRepresentation.base);
   const [currentAspectChanging, setCurrentAspectChanging] = useState(stringRepresentation.aspectChanging);
-  
+
   const saveStringRepresentation = async () => {
+    const string = `${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`;
     await apiClient.updateNodeString(
       climateConceptId,
-      StringRepresentation.parse(`${currentChangeDirection}_${currentTypeOf}_${currentBase}_${currentAspectChanging}`).toString()
+      StringRepresentation.parse(string).toString()
     );
-  }
-  
+  };
+
   return (
     <div className={classes.container}>
       {type && <p>{type}</p>}
       <TextField
         style={{ width: '150px', marginRight: '10px' }}
         variant="filled"
-        label='changeDirection'
+        label="changeDirection"
         defaultValue={currentChangeDirection}
         onChange={(event) => setCurrentChangeDirection(event.target.value)}
       />
@@ -43,7 +44,7 @@ export const StringRepresentationForm: FC<Props> = ({ climateConceptId, string, 
       <TextField
         InputProps={{ className: classes.textfield }}
         variant="filled"
-        label='typeOf'
+        label="typeOf"
         defaultValue={currentTypeOf}
         onChange={(event) => setCurrentTypeOf(event.target.value)}
       />
@@ -52,7 +53,7 @@ export const StringRepresentationForm: FC<Props> = ({ climateConceptId, string, 
         InputProps={{ className: classes.textfield }}
         required
         variant="filled"
-        label='base'
+        label="base"
         defaultValue={currentBase}
         onChange={(event) => setCurrentBase(event.target.value)}
       />
@@ -61,14 +62,14 @@ export const StringRepresentationForm: FC<Props> = ({ climateConceptId, string, 
         InputProps={{ className: classes.textfield }}
         required
         variant="filled"
-        label='aspectChanging'
+        label="aspectChanging"
         defaultValue={currentAspectChanging}
         onChange={(event) => setCurrentAspectChanging(event.target.value)}
       />
 
-      <Tooltip title='Save Changes' placement='right'>
-        <IconButton size='large' onClick={saveStringRepresentation}>
-          <SaveSharpIcon fontSize='inherit'/>
+      <Tooltip title="Save Changes" placement="right">
+        <IconButton size="large" onClick={saveStringRepresentation}>
+          <SaveSharpIcon fontSize="inherit" />
         </IconButton>
       </Tooltip>
     </div>

@@ -1,9 +1,0 @@
-.imageButton {
-  border: 2px solid rgb(196, 196, 196);
-  border-bottom: none;
-  border-radius: 1px;
-}
-
-.imageButton:last-of-type {
-  border-bottom: 2px solid rgb(196, 196, 196);
-}
