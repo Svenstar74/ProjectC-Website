@@ -1,7 +1,6 @@
 import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import { useApiClient } from '../hooks/useApiClient';
-import { useAppSelector } from '../store/redux/hooks';
 
 interface Props {
   open: boolean;
@@ -30,7 +29,7 @@ export const NewEdgeDialog: FC<Props> = ({ open, onClose, causeNodeId }) => {
     });
 
     // eslint-disable-next-line
-  }, []);
+  }, [open]);
 
   return (
     <div>
