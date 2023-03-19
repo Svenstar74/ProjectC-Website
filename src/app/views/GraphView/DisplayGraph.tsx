@@ -4,14 +4,17 @@ import { ControlsContainer, FullScreenControl, SearchControl, SigmaContainer, Zo
 import '@react-sigma/core/lib/react-sigma.min.css';
 
 import { LoadGraph } from './LoadGraph';
-import { GraphEvents } from './GraphEvents';
+import { GraphEventsMoveTool } from './GraphEventsMoveTool';
+import { GraphEventsSelectTool } from './GraphEventsSelectTool';
 import ArrowEdgeProgram from './customPrograms/edge.arrow';
 import { AppContext } from '../../store/context/AppContext';
 import classes from './DisplayGraph.module.css';
+import { useAppSelector } from '../../store/redux/hooks';
 
 export const DisplayGraph = () => {
   const { setSigmaInstance } = useContext(AppContext);
-
+  const selectedTool = useAppSelector(state => state.tool.selectedTool);
+  
   return (
     <div className={classes.sigmaContainer}>
       <SigmaContainer
@@ -27,7 +30,8 @@ export const DisplayGraph = () => {
         }}
         style={{ width: '100%', height: '100%' }}
       >
-        <GraphEvents />
+        {selectedTool === 0 && <GraphEventsMoveTool />}
+        {selectedTool === 1 && <GraphEventsSelectTool />}
         <LoadGraph />
         <ControlsContainer position="top-right">
           <ZoomControl />
