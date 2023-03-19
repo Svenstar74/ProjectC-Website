@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../store/redux/hooks';
 import { clearSelectedEdge, clearSelectedNode, setSelectedEdge, setSelectedNode } from '../../store/redux/graphSlice';
 import { ContextMenu } from '../../components/ContextMenu';
 
-export const GraphEvents = () => {
+export const GraphEventsMoveTool = () => {
   const apiClient = useApiClient();
   const sigma = useSigma();
   const registerEvents = useRegisterEvents();

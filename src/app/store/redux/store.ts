@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import authReducer from './authSlice';
 import graphReducer from './graphSlice';
+import toolReducer from './toolSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     graph: graphReducer,
+    tool: toolReducer,
   },
 });
 
