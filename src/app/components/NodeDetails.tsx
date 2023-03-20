@@ -94,7 +94,7 @@ export const NodeDetails = () => {
           defaultValue={shortDescription}
         /> */}
 
-        <Accordion style={{marginTop: "20px"}}>
+        {/* <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
           >
@@ -112,7 +112,7 @@ export const NodeDetails = () => {
               </ListItem>
             </List>
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
 
         <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary
