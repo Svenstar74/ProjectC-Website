@@ -1,6 +1,6 @@
 import { useState } from 'react';
-
-import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, CardHeader, Chip, Link, List, ListItem, TextField, Typography } from '@mui/material';
+// Link, List, ListItem, TextField, 
+import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, CardHeader, Chip, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
 
@@ -33,7 +33,7 @@ export const NodeDetails = () => {
   const [needsReview, setNeedsReview] = useState(false);
   const [needsCorrection, setNeedsCorrection] = useState(false);
 
-  const shortDescription = `And once international scientists had eliminated the effect of temperature averages across the whole growing season, they still found that heatwaves, drought and torrential downfall accounted for 18% to 43% of losses.\n`;
+  // const shortDescription = `And once international scientists had eliminated the effect of temperature averages across the whole growing season, they still found that heatwaves, drought and torrential downfall accounted for 18% to 43% of losses.\n`;
   
   return (
     <Card sx={{ width: 400 }}>
