@@ -13,10 +13,11 @@ function App() {
   return (
     <>
       <div className={classes.app} onContextMenu={(e) => e.preventDefault()}>
-        <div className={classes.detailsView}><NodeDetails /></div>
         <div className={classes.graphView}><DisplayGraph /></div>
         {/* <div className={classes.bottomDetails}><BottomDetailsView /></div>         */}
       </div>
+
+      <div className={classes.nodeDetails}><NodeDetails /></div>
 
       <div className={classes.hamburgerMenu}><HamburgerMenu /></div>
       <div className={classes.toolbar}><Toolbar /></div>

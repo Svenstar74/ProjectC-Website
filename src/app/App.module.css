@@ -23,6 +23,12 @@
   z-index: 10;
 }
 
+.nodeDetails {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .hamburgerMenu {
   position: absolute;
   right: 60px;
