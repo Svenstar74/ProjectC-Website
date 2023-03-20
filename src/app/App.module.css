@@ -8,12 +8,7 @@
 
 .graphView {
   width: 100%;
-  height: 70vh;
-}
-
-.detailsView {
-  width: 600px;
-  transform: translateX(0px);
+  height: 100vh;
 }
 
 .bottomDetails {
@@ -21,6 +16,12 @@
   height: 30vh;
   box-shadow: black 0px 3px 10px;
   z-index: 10;
+}
+
+.nodeDetails {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .hamburgerMenu {
