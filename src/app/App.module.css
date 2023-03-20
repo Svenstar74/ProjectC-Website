@@ -1,6 +1,6 @@
 .app {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   overflow: hidden;
   width: 100vw;
   height: 100vh;
@@ -9,11 +9,6 @@
 .graphView {
   width: 100%;
   height: 100vh;
-}
-
-.detailsView {
-  width: 600px;
-  transform: translateX(0px);
 }
 
 .bottomDetails {

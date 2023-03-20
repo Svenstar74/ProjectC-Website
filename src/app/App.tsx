@@ -14,7 +14,7 @@ function App() {
     <>
       <div className={classes.app} onContextMenu={(e) => e.preventDefault()}>
         <div className={classes.graphView}><DisplayGraph /></div>
-        {/* <div className={classes.bottomDetails}><BottomDetailsView /></div>         */}
+        <div className={classes.bottomDetails}><BottomDetailsView /></div>        
       </div>
 
       <div className={classes.nodeDetails}><NodeDetails /></div>

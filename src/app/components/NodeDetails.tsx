@@ -85,14 +85,14 @@ export const NodeDetails = () => {
           }}
         />
 
-        <TextField
+        {/* <TextField
           fullWidth
           multiline
           variant="outlined"
           size="small"
           label="Short Description"
           defaultValue={shortDescription}
-        />
+        /> */}
 
         <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary
@@ -102,7 +102,7 @@ export const NodeDetails = () => {
           </AccordionSummary>
           <AccordionDetails>
             <List dense>
-              <ListItem>
+              <ListItem sx={{padding: 0}}>
                 <Link
                   rel="noopener noreferrer" target="_blank"
                   href="https://physicsworld.com/a/crops-at-risk-from-changing-climate/"
@@ -128,7 +128,7 @@ export const NodeDetails = () => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion style={{marginTop: "20px"}}>
+        {/* <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
           >
@@ -140,9 +140,9 @@ export const NodeDetails = () => {
               malesuada lacus ex, sit amet blandit leo lobortis eget.
             </Typography>
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
 
-        <Accordion style={{marginTop: "20px"}}>
+        {/* <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -156,7 +156,7 @@ export const NodeDetails = () => {
               malesuada lacus ex, sit amet blandit leo lobortis eget.
             </Typography>
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
           
         </CardContent>
       </Collapse>
