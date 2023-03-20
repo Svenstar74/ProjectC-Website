@@ -3,8 +3,10 @@ import { useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, CardHeader, Chip, Link, List, ListItem, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
+
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import EditIcon from '@mui/icons-material/Edit';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -38,14 +40,19 @@ export const NodeDetails = () => {
 
       <CardHeader
         action={
-          <ExpandMore
-            expand={expanded}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </ExpandMore>
+          <>
+            <IconButton>
+              <EditIcon />
+            </IconButton>
+            <ExpandMore
+              expand={expanded}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </>
         }
         title="increase_[]_crop_losses"
         titleTypographyProps={{ variant: "body1" }}
