@@ -1,0 +1,18 @@
+span {
+  margin-right: 20px;
+}
+
+.container {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.heading {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.icon {
+  position: relative;
+  top: -6px;
+}

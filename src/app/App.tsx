@@ -5,6 +5,7 @@ import { DisplayGraph } from './views/GraphView/DisplayGraph';
 import { useWebSocket } from './hooks/useWebSocket';
 import { HamburgerMenu } from './components/HamburgerMenu';
 import { Toolbar } from './components/Toolbar';
+import { NodeDetails } from './components/NodeDetails';
 
 function App() {
   useWebSocket();
@@ -12,8 +13,9 @@ function App() {
   return (
     <>
       <div className={classes.app} onContextMenu={(e) => e.preventDefault()}>
+        <div className={classes.detailsView}><NodeDetails /></div>
         <div className={classes.graphView}><DisplayGraph /></div>
-        <div className={classes.bottomDetails}><BottomDetailsView /></div>        
+        {/* <div className={classes.bottomDetails}><BottomDetailsView /></div>         */}
       </div>
 
       <div className={classes.hamburgerMenu}><HamburgerMenu /></div>
