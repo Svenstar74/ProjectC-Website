@@ -8,13 +8,13 @@ import { GraphEventsMoveTool } from './GraphEventsMoveTool';
 import { GraphEventsSelectTool } from './GraphEventsSelectTool';
 import ArrowEdgeProgram from './customPrograms/edge.arrow';
 import { AppContext } from '../../store/context/AppContext';
-import classes from './DisplayGraph.module.css';
 import { useAppSelector } from '../../store/redux/hooks';
+import classes from './DisplayGraph.module.css';
 
 export const DisplayGraph = () => {
   const { setSigmaInstance } = useContext(AppContext);
-  const selectedTool = useAppSelector(state => state.tool.selectedTool);
-  
+  const selectedTool = useAppSelector((state) => state.tool.selectedTool);
+
   return (
     <div className={classes.sigmaContainer}>
       <SigmaContainer
@@ -30,16 +30,21 @@ export const DisplayGraph = () => {
         }}
         style={{ width: '100%', height: '100%' }}
       >
+
         {selectedTool === 0 && <GraphEventsMoveTool />}
         {selectedTool === 1 && <GraphEventsSelectTool />}
+        
         <LoadGraph />
+
         <ControlsContainer position="top-right">
           <ZoomControl />
           <FullScreenControl />
         </ControlsContainer>
+
         <ControlsContainer position="bottom-right">
           <SearchControl style={{ width: '200px' }} />
         </ControlsContainer>
+
       </SigmaContainer>
     </div>
   );

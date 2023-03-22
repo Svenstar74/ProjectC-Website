@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 
-import { useApiClient } from '../hooks/useApiClient';
+import { useApiClient } from '../../hooks/useApiClient';
 
 interface Props {
   open: boolean;
@@ -10,9 +10,14 @@ interface Props {
   deletedEdgeTarget: string;
 }
 
-export const DelEdgeDialog: FC<Props> = ({ open, deletedEdgeSource, deletedEdgeTarget, onClose }) => {
+export const DelEdgeDialog: FC<Props> = ({
+  open,
+  deletedEdgeSource,
+  deletedEdgeTarget,
+  onClose,
+}) => {
   const apiClient = useApiClient();
-  
+
   const deleteEdge = () => {
     apiClient.deleteEdge(deletedEdgeSource, deletedEdgeTarget);
     onClose();

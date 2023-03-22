@@ -5,10 +5,10 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 
-import { NewNodeDialog } from './NewNodeDialog';
-import { NewEdgeDialog } from './NewEdgeDialog';
-import { DelEdgeDialog } from './DelEdgeDialog';
-import { DelNodeDialog } from './DelNodeDialog';
+import { NewNodeDialog } from './Dialogs/NewNodeDialog';
+import { NewEdgeDialog } from './Dialogs/NewEdgeDialog';
+import { DelEdgeDialog } from './Dialogs/DelEdgeDialog';
+import { DelNodeDialog } from './Dialogs/DelNodeDialog';
 
 type Props = {
   show: boolean;

@@ -30,6 +30,17 @@ export class ApiClient {
       '/api/v1/climate-concepts/' + id,
       this.headers
     );
+
+    return response.data.data;
+  }
+
+  async getNode(climateConceptId: string): Promise<AggregatedNodeModel | null> {
+    const response = await apiCall(
+      'GET',
+      '/api/v1/nodes/' + climateConceptId,
+      this.headers
+    );
+
     return response.data.data;
   }
 
@@ -83,7 +94,7 @@ export class ApiClient {
   }
 
   async updateNodePosition(
-    nodeId: string,
+    climateConceptId: string,
     x: number,
     y: number
   ): Promise<number> {
@@ -91,7 +102,7 @@ export class ApiClient {
       'POST',
       '/api/v1/nodes/update-position',
       this.headers,
-      { nodeId, x, y }
+      { climateConceptId, x, y }
     );
 
     return response.status;
@@ -106,6 +117,21 @@ export class ApiClient {
       '/api/v1/nodes/update-string',
       this.headers,
       { climateConceptId, stringRepresentation }
+    );
+
+    return response.status;
+  }
+
+  async updateNodeLabel(
+    climateConceptId: string,
+    label: 'NeedsReview' | 'NeedsCorrection',
+    value: boolean
+  ) {
+    const response = await apiCall(
+      'POST',
+      '/api/v1/nodes/update-label',
+      this.headers,
+      { climateConceptId, label, value }
     );
 
     return response.status;
