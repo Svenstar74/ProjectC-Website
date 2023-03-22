@@ -22,7 +22,7 @@ export const NewEdgeDialog: FC<Props> = ({ open, onClose, causeNodeId }) => {
 
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const [stringRepresentations, setStringRepresentations] = useState<string[]>([]);
-  
+
   useEffect(() => {
     apiClient.getListOfStringRepresentations().then((data) => {
       setStringRepresentations(data);
@@ -36,6 +36,7 @@ export const NewEdgeDialog: FC<Props> = ({ open, onClose, causeNodeId }) => {
       <Dialog open={open}>
         <DialogTitle>Add New Edge</DialogTitle>
         <DialogContent>
+
           <DialogContentText style={{ marginBottom: '20px' }}>
             Enter the string representation of the node you want to connect to.
           </DialogContentText>
@@ -49,11 +50,14 @@ export const NewEdgeDialog: FC<Props> = ({ open, onClose, causeNodeId }) => {
             )}
             onChange={(event, value) => setSelectedValue(value)}
           />
+
         </DialogContent>
+
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
           <Button disabled={submitDisabled()} onClick={submitForm}>Add</Button>
         </DialogActions>
+        
       </Dialog>
     </div>
   );

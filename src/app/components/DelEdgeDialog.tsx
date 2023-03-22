@@ -10,9 +10,14 @@ interface Props {
   deletedEdgeTarget: string;
 }
 
-export const DelEdgeDialog: FC<Props> = ({ open, deletedEdgeSource, deletedEdgeTarget, onClose }) => {
+export const DelEdgeDialog: FC<Props> = ({
+  open,
+  deletedEdgeSource,
+  deletedEdgeTarget,
+  onClose,
+}) => {
   const apiClient = useApiClient();
-  
+
   const deleteEdge = () => {
     apiClient.deleteEdge(deletedEdgeSource, deletedEdgeTarget);
     onClose();

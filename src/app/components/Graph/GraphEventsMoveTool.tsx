@@ -4,7 +4,7 @@ import { useApiClient } from '../../hooks/useApiClient';
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 import { useAppDispatch, useAppSelector } from '../../store/redux/hooks';
 import { clearSelectedEdge, clearSelectedNode, setSelectedEdge, setSelectedNode } from '../../store/redux/graphSlice';
-import { ContextMenu } from '../../components/ContextMenu';
+import { ContextMenu } from '../ContextMenu';
 
 export const GraphEventsMoveTool = () => {
   const apiClient = useApiClient();
@@ -17,7 +17,7 @@ export const GraphEventsMoveTool = () => {
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
 
   const [showContextMenu, setShowContextMenu] = useState(false);
-  const [contextMenuPosition, setContextMenuPosition] = useState({x: 0, y: 0});
+  const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
   const [contextMenuOptions, setContextMenuOptions] = useState<string[]>([]);
   const [clickedNodeId, setClickedNodeId] = useState('');
   const [clickedEdgeNodeIds, setClickedEdgeNodeIds] = useState({ cause: '', effect: '' });
@@ -78,7 +78,7 @@ export const GraphEventsMoveTool = () => {
 
           // TODO: Update only if position has changed
           apiClient.updateNodePosition(
-            nodeAttributes.nodeId,
+            draggedNode,
             nodeAttributes.x,
             nodeAttributes.y
           );
@@ -100,10 +100,16 @@ export const GraphEventsMoveTool = () => {
         const sourceId = sigma.getGraph().source(e.edge);
         const targetId = sigma.getGraph().target(e.edge);
 
-        const sourceString = sigma.getGraph().getNodeAttribute(sourceId, 'label');
-        const targetString = sigma.getGraph().getNodeAttribute(targetId, 'label');
-    
-        dispatch(setSelectedEdge([sourceId, sourceString, targetId, targetString]));
+        const sourceString = sigma
+          .getGraph()
+          .getNodeAttribute(sourceId, 'label');
+        const targetString = sigma
+          .getGraph()
+          .getNodeAttribute(targetId, 'label');
+
+        dispatch(
+          setSelectedEdge([sourceId, sourceString, targetId, targetString])
+        );
       },
       clickStage: () => {
         if (selectedNode) {

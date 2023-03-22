@@ -28,7 +28,6 @@ export const useWebSocket = () => {
           appContext.globalSigmaInstance
             ?.getGraph()
             .addNode(data.climateConceptId, {
-              nodeId: data.nodeId,
               x: data.x,
               y: data.y,
               label: data.stringRepresentation,
@@ -43,7 +42,27 @@ export const useWebSocket = () => {
           appContext.globalSigmaInstance?.getGraph().setNodeAttribute(data.climateConceptId, 'y', data.y);
           break;
         case 'UpdatedStringRepresentation':
-          appContext.globalSigmaInstance?.getGraph().setNodeAttribute(data.climateConceptId, 'label', data.stringRepresentation)
+          appContext.globalSigmaInstance?.getGraph().setNodeAttribute(data.climateConceptId, 'label', data.stringRepresentation);
+          break;
+        case 'UpdatedLabel':
+          if (data.label === 'NeedsReview') {
+            appContext.globalSigmaInstance?.getGraph().setNodeAttribute(data.climateConceptId, 'needsReview', data.value);
+          } else if (data.label === 'NeedsCorrection') {
+            appContext.globalSigmaInstance?.getGraph().setNodeAttribute(data.climateConceptId, 'needsCorrection', data.value);
+          }
+
+          const attributes = appContext.globalSigmaInstance?.getGraph().getNodeAttributes(data.climateConceptId);
+
+          let color = '#999';
+          if (attributes?.needsReview) {
+            color = '#008bff';
+          }
+
+          if (attributes?.needsCorrection) {
+            color = '#f00';
+          }
+
+          appContext.globalSigmaInstance?.getGraph().setNodeAttribute(data.climateConceptId, 'color', color);
           break;
         case 'DeletedNode':
           appContext.globalSigmaInstance?.getGraph().dropNode(data.climateConceptId);
