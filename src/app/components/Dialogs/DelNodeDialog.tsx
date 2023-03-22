@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 
-import { useApiClient } from '../hooks/useApiClient';
+import { useApiClient } from '../../hooks/useApiClient';
 
 interface Props {
   open: boolean;

@@ -1,91 +1,148 @@
-import { useState } from 'react';
-// Link, List, ListItem, TextField, 
-import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, CardHeader, Chip, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import Collapse from '@mui/material/Collapse';
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, Chip, Collapse, Menu, MenuItem, IconButton, ListItemText } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import EditIcon from '@mui/icons-material/Edit';
-
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+import { AggregatedNodeModel } from '@svenstar74/business-logic';
+import { useApiClient } from '../hooks/useApiClient';
+import { useAppSelector } from '../store/redux/hooks';
+import { EditStringRepresentationDialog } from './EditStringRepresentationDialog';
 
 export const NodeDetails = () => {
+  const apiClient = useApiClient();
+  
+  // For the menu that can be opened with the three dots in the upper right corner
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+
+  // If the full card is shown or not
   const [expanded, setExpanded] = useState(false);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  // Information about the current node
+  const selectedNode = useAppSelector((state) => state.graph.selectedNode);
+  const [aggregatedNode, setAggregatedNode] = useState<AggregatedNodeModel | null>(null);
 
+  // For the chip labels
   const [needsReview, setNeedsReview] = useState(false);
   const [needsCorrection, setNeedsCorrection] = useState(false);
 
-  // const shortDescription = `And once international scientists had eliminated the effect of temperature averages across the whole growing season, they still found that heatwaves, drought and torrential downfall accounted for 18% to 43% of losses.\n`;
-  
-  return (
-    <Card sx={{ width: 400 }}>
+  const handleReviewChipClicked = () => {
+    if (aggregatedNode === null) {
+      return;
+    }
 
-      <CardHeader
-        action={
-          <>
-            <IconButton>
-              <EditIcon />
-            </IconButton>
-            <ExpandMore
-              expand={expanded}
-              onClick={handleExpandClick}
-              aria-expanded={expanded}
-              aria-label="show more"
-            >
-              <ExpandMoreIcon />
-            </ExpandMore>
-          </>
+    apiClient.updateNodeLabel(aggregatedNode.climateConcept.id, 'NeedsReview', !needsReview);
+    setNeedsReview((prev) => !prev);
+  };
+
+  const handleCorrectionChipClicked = () => {
+    if (aggregatedNode === null) {
+      return;
+    }
+
+    apiClient.updateNodeLabel(aggregatedNode.climateConcept.id, 'NeedsCorrection', !needsCorrection);
+    setNeedsCorrection((prev) => !prev);
+  };
+
+  // Fetch the node details from the backend, everytime the selectedNode changes
+  useEffect(() => {
+    if (selectedNode) {
+      apiClient.getNode(selectedNode.node).then((result) => {
+        setAggregatedNode(result);
+        if (result) {
+          setNeedsReview(result.needsReview);
+          setNeedsCorrection(result.needsCorrection);
         }
-        title="increase_[]_crop_losses"
-        titleTypographyProps={{ variant: "body1" }}
-        subheader="ID 310771246"
-        subheaderTypographyProps={{ variant: "body2" }}
-      />
+      });
+    }
+    // eslint-disable-next-line
+  }, [selectedNode]);
 
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          
-        <Chip
-          label="Needs Review"
-          size="small"
-          onClick={() => setNeedsReview(prev => !prev)}
-          style={{
-            marginBottom: "25px", marginRight: "10px",
-            background: needsReview ? "#006080" : "#eee",
-            color: needsReview ? "white" : "black" 
-          }}
-        />
-        
-        <Chip
-          label="Needs Correction"
-          size="small"
-          onClick={() => setNeedsCorrection(prev => !prev)}
-          style={{
-            marginBottom: "25px",
-            background: needsCorrection ? "#801a00" : "#eee",
-            color: needsCorrection ? "white" : "black"
-          }}
+  if (selectedNode === null || aggregatedNode === null) {
+    return null;
+  }
+
+  return (
+    <>
+      <Card sx={{ width: 'fit-content', minWidth: '400px', maxHeight: '100vh' }}>
+        <CardHeader
+          action={
+            <>
+              <IconButton
+                onClick={(event) => setAnchorEl(event.currentTarget)}
+                style={{ top: '-4px' }}
+              >
+                <MoreVertIcon />
+              </IconButton>
+              
+              <Menu
+                open={open}
+                anchorEl={anchorEl}
+                onClose={() => setAnchorEl(null)}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    setAnchorEl(null);
+                    setExpanded((prev) => !prev);
+                  }}
+                >
+                  <ListItemText>
+                    {expanded ? 'Hide Details' : 'Show Details'}
+                  </ListItemText>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setAnchorEl(null);
+                    setOpenEditDialog(true);
+                  }}
+                >
+                  Edit String Representation
+                </MenuItem>
+              </Menu>
+            </>
+          }
+          title={selectedNode.label}
+          titleTypographyProps={{ variant: 'body1' }}
+          subheader={`ID ${selectedNode.node}`}
+          subheaderTypographyProps={{ variant: 'body2' }}
         />
 
-        {/* <TextField
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            
+            <Chip
+              label="Needs Review"
+              size="small"
+              onClick={handleReviewChipClicked}
+              style={{
+                marginBottom: '25px',
+                marginRight: '10px',
+                background: needsReview ? '#006080' : '#eee',
+                color: needsReview ? 'white' : 'black',
+              }}
+            />
+
+            <Chip
+              label="Needs Correction"
+              size="small"
+              onClick={handleCorrectionChipClicked}
+              style={{
+                marginBottom: '25px',
+                background: needsCorrection ? '#801a00' : '#eee',
+                color: needsCorrection ? 'white' : 'black',
+              }}
+            />
+
+            {/* <TextField
           fullWidth
           multiline
           variant="outlined"
@@ -94,7 +151,7 @@ export const NodeDetails = () => {
           defaultValue={shortDescription}
         /> */}
 
-        {/* <Accordion style={{marginTop: "20px"}}>
+            {/* <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
           >
@@ -114,21 +171,21 @@ export const NodeDetails = () => {
           </AccordionDetails>
         </Accordion> */}
 
-        <Accordion style={{marginTop: "20px"}}>
+            {/* <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
           >
             <Typography>Connections</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-              malesuada lacus ex, sit amet blandit leo lobortis eget.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
+            <Typography variant="subtitle1">Is effect for</Typography>
+            {aggregatedNode.climateConcept.incomingConnections.map(connection => <li>{connection}</li> )}
 
-        {/* <Accordion style={{marginTop: "20px"}}>
+              
+          </AccordionDetails>
+        </Accordion> */}
+
+            {/* <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
           >
@@ -142,7 +199,7 @@ export const NodeDetails = () => {
           </AccordionDetails>
         </Accordion> */}
 
-        {/* <Accordion style={{marginTop: "20px"}}>
+            {/* <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
@@ -157,9 +214,17 @@ export const NodeDetails = () => {
             </Typography>
           </AccordionDetails>
         </Accordion> */}
-          
-        </CardContent>
-      </Collapse>
-    </Card>
+          </CardContent>
+        </Collapse>
+      </Card>
+
+      <EditStringRepresentationDialog
+        open={openEditDialog}
+        onClose={() => setOpenEditDialog(false)}
+        climateConceptId={aggregatedNode.climateConcept.id}
+        current={aggregatedNode.climateConcept.stringRepresentation}
+        id={2}
+      />
+    </>
   );
-}
+};

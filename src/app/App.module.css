@@ -1,21 +1,6 @@
-.app {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+.graphView {
   width: 100vw;
   height: 100vh;
-}
-
-.graphView {
-  width: 100%;
-  height: 100vh;
-}
-
-.bottomDetails {
-  width: 100%;
-  height: 30vh;
-  box-shadow: black 0px 3px 10px;
-  z-index: 10;
 }
 
 .nodeDetails {

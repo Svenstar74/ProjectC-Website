@@ -21,11 +21,22 @@ export const LoadGraph = () => {
 
       // For each node in the backend, create a node in the graph
       data.forEach((node: AggregatedNodeModel) => {
+        let color = '#999';
+        if (node.needsReview) {
+          color = '#008bff';
+        }
+
+        if (node.needsCorrection) {
+          color = '#f00';
+        }
+
         graph.addNode(node.climateConcept.id, {
-          nodeId: node.id,
           x: node.x,
           y: node.y,
+          color,
           label: node.climateConcept.stringRepresentation,
+          needsReview: node.needsReview,
+          needsCorrection: node.needsCorrection,
           forceLabel: true,
         });
       });
