@@ -2,8 +2,8 @@ import { FC, useContext, useState } from 'react';
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Select, TextField } from '@mui/material';
 import { StringRepresentation } from '@svenstar74/business-logic';
 
-import { useApiClient } from '../hooks/useApiClient';
-import { AppContext } from '../store/context/AppContext';
+import { useApiClient } from '../../hooks/useApiClient';
+import { AppContext } from '../../store/context/AppContext';
 
 interface Props {
   open: boolean;

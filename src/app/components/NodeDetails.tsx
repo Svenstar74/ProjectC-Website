@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, Chip, Menu, MenuItem, IconButton, ListItemText } from '@mui/material';
-import Collapse from '@mui/material/Collapse';
+import { Card, CardContent, CardHeader, Chip, Collapse, Menu, MenuItem, IconButton, ListItemText } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { AggregatedNodeModel } from '@svenstar74/business-logic';
@@ -224,6 +223,7 @@ export const NodeDetails = () => {
         onClose={() => setOpenEditDialog(false)}
         climateConceptId={aggregatedNode.climateConcept.id}
         current={aggregatedNode.climateConcept.stringRepresentation}
+        id={2}
       />
     </>
   );

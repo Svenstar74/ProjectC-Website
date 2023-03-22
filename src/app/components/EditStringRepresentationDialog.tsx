@@ -3,7 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 
 import { StringRepresentation } from '@svenstar74/business-logic';
 import { useAppDispatch, useAppSelector } from '../store/redux/hooks';
-import { setSelectedNode } from '../store/redux/graphSlice';
+import { setSelectedEdge, setSelectedNode } from '../store/redux/graphSlice';
 import { useApiClient } from '../hooks/useApiClient';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
   onClose: () => void;
   climateConceptId: string;
   current: string;
+  id: number;
 }
 
 export const EditStringRepresentationDialog: FC<Props> = ({
@@ -18,11 +19,13 @@ export const EditStringRepresentationDialog: FC<Props> = ({
   onClose,
   climateConceptId,
   current,
+  id,
 }) => {
   const apiClient = useApiClient();
 
   const dispatch = useAppDispatch();
   const selectedNode = useAppSelector((state) => state.graph.selectedNode);
+  const selectedEdge = useAppSelector((state) => state.graph.selectedEdge);
 
   const stringRepresentation = StringRepresentation.parse(current);
   const [currentChangeDirection, setCurrentChangeDirection] = useState(stringRepresentation.changeDirection);
@@ -49,7 +52,13 @@ export const EditStringRepresentationDialog: FC<Props> = ({
 
     const result = await apiClient.updateNodeString(climateConceptId, stringRepresentation);
     if (result === 200) {
-      dispatch(setSelectedNode({ ...selectedNode!, label: stringRepresentation }));
+      if (id === 2) {
+        dispatch(setSelectedNode({ ...selectedNode!, label: stringRepresentation }));
+      } else if (id === 1) {
+        dispatch(setSelectedEdge([selectedEdge[0], stringRepresentation, selectedEdge[2], selectedEdge[3]]));
+      } else if (id === 3) {
+        dispatch(setSelectedEdge([selectedEdge[0], selectedEdge[1], selectedEdge[2], stringRepresentation]));
+      }
       onClose();
     }
   };
