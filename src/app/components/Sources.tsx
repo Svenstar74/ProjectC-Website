@@ -5,7 +5,7 @@ import { Source } from './Source';
 
 export const Sources = () => {
   return (
-    <Accordion style={{ marginTop: '20px' }}>
+    <Accordion defaultExpanded style={{ marginTop: '20px' }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Sources</Typography>
       </AccordionSummary>
