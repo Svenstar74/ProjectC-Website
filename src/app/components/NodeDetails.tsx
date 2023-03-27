@@ -17,7 +17,7 @@ export const NodeDetails = () => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
   // If the full card is shown or not
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
 
   // Information about the current node
   const selectedNode = useAppSelector((state) => state.graph.selectedNode);
