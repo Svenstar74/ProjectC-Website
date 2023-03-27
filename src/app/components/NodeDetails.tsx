@@ -5,11 +5,12 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { AggregatedNodeModel } from '@svenstar74/business-logic';
 import { useApiClient } from '../hooks/useApiClient';
 import { useAppSelector } from '../store/redux/hooks';
-import { EditStringRepresentationDialog } from './EditStringRepresentationDialog';
+import { EditStringRepresentationDialog } from './Dialogs/EditStringRepresentationDialog';
+import { Sources } from './Sources';
 
 export const NodeDetails = () => {
   const apiClient = useApiClient();
-  
+
   // For the menu that can be opened with the three dots in the upper right corner
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -65,8 +66,12 @@ export const NodeDetails = () => {
 
   return (
     <>
-      <Card sx={{ width: 'fit-content', minWidth: '400px', maxHeight: '100vh' }}>
+      <Card
+        style={{ overflowY: expanded ? 'scroll' : 'hidden' }}
+        sx={{ width: '500px', maxHeight: '100vh' }}
+      >
         <CardHeader
+          style={{ overflow: 'auto' }}
           action={
             <>
               <IconButton
@@ -75,7 +80,7 @@ export const NodeDetails = () => {
               >
                 <MoreVertIcon />
               </IconButton>
-              
+
               <Menu
                 open={open}
                 anchorEl={anchorEl}
@@ -142,36 +147,9 @@ export const NodeDetails = () => {
               }}
             />
 
-            {/* <TextField
-          fullWidth
-          multiline
-          variant="outlined"
-          size="small"
-          label="Short Description"
-          defaultValue={shortDescription}
-        /> */}
+            <Sources />
 
-            {/* <Accordion style={{marginTop: "20px"}}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-          >
-            <Typography>Sources</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <List dense>
-              <ListItem sx={{padding: 0}}>
-                <Link
-                  rel="noopener noreferrer" target="_blank"
-                  href="https://physicsworld.com/a/crops-at-risk-from-changing-climate/"
-                >
-                  https://physicsworld.com/a/crops-at-risk-from-changing-climate/
-                </Link>
-              </ListItem>
-            </List>
-          </AccordionDetails>
-        </Accordion> */}
-
-            {/* <Accordion style={{marginTop: "20px"}}>
+            {/* {/* <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
           >
