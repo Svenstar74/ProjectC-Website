@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, Collapse, IconButton, Menu, MenuItem } f
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { useAppSelector } from '../store/redux/hooks';
-import { EditStringRepresentationDialog } from './EditStringRepresentationDialog';
+import { EditStringRepresentationDialog } from './Dialogs/EditStringRepresentationDialog';
 
 export const EdgeDetails = () => {
   // For the menu that can be opened with the three dots in the upper right corner
