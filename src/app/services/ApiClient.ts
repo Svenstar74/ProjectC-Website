@@ -93,6 +93,21 @@ export class ApiClient {
     return response.status;
   }
 
+  async addSource(
+    climateConceptId: string,
+    url: string,
+    originalText: string,
+  ): Promise<number> {
+    const response = await apiCall(
+      'POST',
+      '/api/v1/nodes/add-source',
+      this.headers,
+      { climateConceptId, url, originalText },
+    );
+
+    return response.status;
+  }
+  
   async updateNodePosition(
     climateConceptId: string,
     x: number,
@@ -157,6 +172,21 @@ export class ApiClient {
       '/api/v1/nodes/delete-edge',
       this.headers,
       { sourceClimateConceptId, targetClimateConceptId }
+    );
+
+    return response.status;
+  }
+
+  async deleteSource(
+    climateConceptId: string,
+    url: string,
+    originalText: string,
+  ): Promise<number> {
+    const response = await apiCall(
+      'DELETE',
+      '/api/v1/nodes/delete-source',
+      this.headers,
+      { climateConceptId, url, originalText },
     );
 
     return response.status;

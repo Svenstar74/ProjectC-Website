@@ -37,6 +37,8 @@ export const useWebSocket = () => {
         case 'AddedEdge':
           appContext.globalSigmaInstance?.getGraph().addEdge(data.sourceClimateConceptId, data.targetClimateConceptId, { size: 2 });
           break;
+        case 'AddedSource':
+          break;
         case 'UpdatedPosition':
           appContext.globalSigmaInstance?.getGraph().setNodeAttribute(data.climateConceptId, 'x', data.x);
           appContext.globalSigmaInstance?.getGraph().setNodeAttribute(data.climateConceptId, 'y', data.y);
@@ -70,6 +72,8 @@ export const useWebSocket = () => {
           break;
         case 'DeletedEdge':
           appContext.globalSigmaInstance?.getGraph().dropEdge(data.sourceClimateConceptId, data.targetClimateConceptId);
+          break;
+        case 'DeletedSource':
           break;
         default:
           console.log('Received unhandled message through web socket of type ' + data.eventType);

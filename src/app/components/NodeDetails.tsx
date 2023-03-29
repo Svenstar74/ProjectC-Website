@@ -147,7 +147,7 @@ export const NodeDetails = () => {
               }}
             />
 
-            <Sources />
+            <Sources climateConceptId={aggregatedNode.climateConcept.id} sources={aggregatedNode.climateConcept.sources} />
 
             {/* {/* <Accordion style={{marginTop: "20px"}}>
           <AccordionSummary

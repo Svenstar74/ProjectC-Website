@@ -4,11 +4,22 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Props {
+  climateConceptId: string;
   url: string;
   originalText: string;
+  onDeleteSource: (
+    climateConceptId: string,
+    url: string,
+    originalText: string
+  ) => void;
 }
 
-export const Source: FC<Props> = ({ url, originalText }) => {
+export const Source: FC<Props> = ({
+  climateConceptId,
+  url,
+  originalText,
+  onDeleteSource,
+}) => {
   const openLink = () => {
     window.open(url, '_blank', 'noreferrer');
   };
@@ -25,10 +36,9 @@ export const Source: FC<Props> = ({ url, originalText }) => {
     >
       <TextField
         fullWidth
-        
         variant="outlined"
         label="Link"
-        defaultValue={url}
+        value={url}
         style={{ verticalAlign: 'middle', marginBottom: '20px' }}
         InputProps={{
           readOnly: true,
@@ -45,7 +55,7 @@ export const Source: FC<Props> = ({ url, originalText }) => {
         multiline
         variant="outlined"
         label="Original Text"
-        defaultValue={originalText}
+        value={originalText}
         InputProps={{
           readOnly: true,
         }}
@@ -53,7 +63,9 @@ export const Source: FC<Props> = ({ url, originalText }) => {
 
       <Tooltip title="Delete Source" style={{ float: 'right' }}>
         <IconButton>
-          <DeleteIcon />
+          <DeleteIcon
+            onClick={() => onDeleteSource(climateConceptId, url, originalText)}
+          />
         </IconButton>
       </Tooltip>
     </div>
