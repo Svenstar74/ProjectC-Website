@@ -2,9 +2,9 @@ import { FC, useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Select, TextField } from '@mui/material';
 
 import { StringRepresentation } from '@svenstar74/business-logic';
-import { useAppDispatch, useAppSelector } from '../store/redux/hooks';
-import { setSelectedEdge, setSelectedNode } from '../store/redux/graphSlice';
-import { useApiClient } from '../hooks/useApiClient';
+import { useAppDispatch, useAppSelector } from '../../store/redux/hooks';
+import { setSelectedEdge, setSelectedNode } from '../../store/redux/graphSlice';
+import { useApiClient } from '../../hooks/useApiClient';
 
 interface Props {
   open: boolean;
