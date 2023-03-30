@@ -5,10 +5,10 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 
+import { useApiClient } from '../hooks/useApiClient';
 import { NewNodeDialog } from './Dialogs/NewNodeDialog';
 import { NewEdgeDialog } from './Dialogs/NewEdgeDialog';
-import { DelEdgeDialog } from './Dialogs/DelEdgeDialog';
-import { DelNodeDialog } from './Dialogs/DelNodeDialog';
+import ConfirmDialog from './Dialogs/ConfirmDialog';
 
 type Props = {
   show: boolean;
@@ -27,11 +27,23 @@ export const ContextMenu: FC<Props> = ({
   clickedEdgeNodeIds = { cause: '', effect: '' },
   onClose,
 }) => {
+  const apiClient = useApiClient();
+  
   const [showNewNodeDialog, setShowNewNodeDialog] = useState(false);
   const [showDelNodeDialog, setShowDelNodeDialog] = useState(false);
   const [showNewEdgeDialog, setShowNewEdgeDialog] = useState(false);
   const [showDelEdgeDialog, setShowDelEdgeDialog] = useState(false);
 
+  function confirmDeleteEdge() {
+    apiClient.deleteEdge(clickedEdgeNodeIds.cause, clickedEdgeNodeIds.effect);
+    setShowDelEdgeDialog(false);
+  }
+
+  function confirmDeleteNode() {
+    apiClient.deleteNode(clickedNodeId);
+    setShowDelNodeDialog(false);
+  }
+  
   return (
     <div>
       {/* Show dialog when associated menu item was clicked */}
@@ -40,21 +52,39 @@ export const ContextMenu: FC<Props> = ({
         onClose={() => setShowNewNodeDialog(false)}
         position={position}
       />
-      <DelNodeDialog
+
+      {/* Confirm deleting a node */}
+      <ConfirmDialog
         open={showDelNodeDialog}
-        onClose={() => setShowDelNodeDialog(false)}
-        nodeToDelete={clickedNodeId}
+        onCancel={() => setShowDelNodeDialog(false)}
+        onConfirm={confirmDeleteNode}
+        content={
+          <>
+            <div>Are you sure you want to delete this node?</div>
+            <div>This action cannot be undone.</div>
+          </>
+        }
+        confirmBtnText="Yes"
       />
+
       <NewEdgeDialog
         open={showNewEdgeDialog}
         onClose={() => setShowNewEdgeDialog(false)}
         causeNodeId={clickedNodeId}
       />
-      <DelEdgeDialog
+
+      {/* Confirm deleting an edge */}
+      <ConfirmDialog
         open={showDelEdgeDialog}
-        onClose={() => setShowDelEdgeDialog(false)}
-        deletedEdgeSource={clickedEdgeNodeIds.cause}
-        deletedEdgeTarget={clickedEdgeNodeIds.effect}
+        onCancel={() => setShowDelEdgeDialog(false)}
+        onConfirm={confirmDeleteEdge}
+        content={
+          <>
+            <div>Are you sure you want to delete this edge?</div>
+            <div>This action cannot be undone.</div>
+          </>
+        }
+        confirmBtnText="Yes"
       />
 
       {/* Show the menu itself */}
