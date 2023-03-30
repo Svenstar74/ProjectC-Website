@@ -67,10 +67,8 @@ export const Source: FC<Props> = ({
         />
 
         <Tooltip title="Delete Source" style={{ float: 'right' }}>
-          <IconButton>
-            <DeleteIcon
-              onClick={() => setShowConfirmDialog(true)}
-            />
+          <IconButton onClick={() => onDeleteSource(climateConceptId, url, originalText)}>
+            <DeleteIcon/>
           </IconButton>
         </Tooltip>
       </div>

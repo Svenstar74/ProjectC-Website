@@ -14,6 +14,7 @@ export const GraphEventsMoveTool = () => {
   const selectedNode = useAppSelector((state) => state.graph.selectedNode);
   const dispatch = useAppDispatch();
 
+  const [positionBeforeClick, setPositionBeforeClick] = useState({ x: 0, y: 0 })
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
 
   const [showContextMenu, setShowContextMenu] = useState(false);
@@ -39,6 +40,8 @@ export const GraphEventsMoveTool = () => {
               .removeNodeAttribute(selectedNode.node, 'highlighted');
           }
 
+          const attributes = sigma.getGraph().getNodeAttributes(e.node);
+          setPositionBeforeClick({x: attributes.x, y: attributes.y})
           setDraggedNode(e.node);
           sigma.getGraph().setNodeAttribute(e.node, 'highlighted', true);
         }
@@ -76,12 +79,14 @@ export const GraphEventsMoveTool = () => {
             })
           );
 
-          // TODO: Update only if position has changed
-          apiClient.updateNodePosition(
-            draggedNode,
-            nodeAttributes.x,
-            nodeAttributes.y
-          );
+          // Update the position for the node in the backend, if the position has changed
+          if (positionBeforeClick.x !== nodeAttributes.x || positionBeforeClick.y !== nodeAttributes.y) {
+            apiClient.updateNodePosition(
+              draggedNode,
+              nodeAttributes.x,
+              nodeAttributes.y
+            );
+          }
         }
       },
       mousemove: (e) => {
