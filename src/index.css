@@ -1,11 +1,7 @@
 :root {
-  --color-dark: #07373b;
-  --color-normal: #006080;
-  --color-bright: #32849b;
-  --color-highlight: #80d7d0;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 body {
   margin: 0;
-  font-family: sans-serif;
 }

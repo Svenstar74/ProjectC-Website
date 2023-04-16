@@ -1,0 +1,29 @@
+.graphView {
+  width: 100vw;
+  height: 100vh;
+}
+
+.details {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.hamburgerMenu {
+  position: absolute;
+  right: 120px;
+  top: 10px;
+}
+
+.viewBar {
+  position: absolute;
+  right: 60px;
+  top: 10px;
+}
+
+.toolbar {
+  position: absolute;
+  right: 10px;
+  top: 200px;
+}
