@@ -5,6 +5,8 @@ import { addClimateConceptEdge, addClimateConceptNode, addClimateConceptSource, 
 import { setLastSelected } from "../store/redux/slices/graphSlice";
 import { AggregatedClimateConceptNodeModel } from "@svenstar74/business-logic/build/src/repositories/ClimateConceptNodes.repository";
 import useApiClient from "./useApiClient";
+import { validate } from "uuid";
+import { SummaryNodeModel } from "@svenstar74/business-logic/build/src/repositories/SummaryNodes.repository";
 
 function useWebSocket() {
   const baseUrl = import.meta.env.VITE_WS_BASE_URL ?? '';
@@ -27,8 +29,16 @@ function useWebSocket() {
     return node.combinedNodes;
   }
 
+  let ws: WebSocket;
+
   function connect() {
-    const ws = new WebSocket(baseUrl + user);
+    // if (!ws) {
+    //   ws = new WebSocket(baseUrl + user);
+    // } else {
+    //   ws.close();
+    // }
+    ws = new WebSocket(baseUrl + user);
+
     console.log('New Websocket with id ' + user);
 
     ws.onopen = () => { console.log('Websocket connection opened, ready for listening'); };
@@ -170,11 +180,13 @@ function useWebSocket() {
           break;
         
         case 'DeletedSummaryNode':
-          dispatch(deleteSummaryNode(data.id));
           getCombinedNodesForSummaryNode(data.id).forEach(node => {
             globalSigmaInstance?.getGraph().setNodeAttribute(node, 'hidden', false);
           })
-          globalSigmaInstance?.getGraph().dropNode(data.id);
+          try {
+            globalSigmaInstance?.getGraph().dropNode(data.id);
+          } catch {}
+          dispatch(deleteSummaryNode(data.id));
           break;
 
         case 'AddedToSummaryNode':
@@ -212,27 +224,73 @@ function useWebSocket() {
           // Remove the climate concept node from the arrays of combined nodes
           // and show it again if summary nodes are shown
           data.deletedNodes.forEach((ccId: string) => {
-            dispatch(removeCombinedNode({ summaryNodeId: data.id, climateConceptNodeId: ccId }));
-            globalSigmaInstance?.getGraph().setNodeAttribute(ccId, 'hidden', false);
+            const deleteFromSummaryNode = async () => {
+              globalSigmaInstance?.getGraph().setNodeAttribute(ccId, 'hidden', false);
+              
+              // Get the list of combined nodes of the summary node
+              let summaryNode: SummaryNodeModel;
+              try {
+                summaryNode = await apiClient.getSummaryNode(data.id);
+              } catch {
+                return;
+              }
 
-            // Remove the climate concept node edges also from the summary node
-            apiClient.getClimateConceptNode(ccId)
-              .then(node => {
-                if (node === null) {
-                  return;
-                }
-                
-                try {
-                  node.climateConcept.incomingConnections.forEach(id => {
-                    globalSigmaInstance?.getGraph().dropEdge(id, data.id);
-                  });
-                } catch {}
-                try {
-                  node.climateConcept.outgoingConnections.forEach(id => {
-                    globalSigmaInstance?.getGraph().dropEdge(data.id, id);
-                  });
-                } catch {}
+              const incomingNodes: { [key: string]: number } = {};
+              const outgoingNodes: { [key: string]: number } = {};
+              
+              summaryNode.combinedNodes.forEach(combinedNode => {
+                // Get all the incoming nodes for all combined nodes
+                globalSigmaInstance?.getGraph().forEachInNeighbor(combinedNode, (neighbor) => {
+                  if (validate(neighbor) || neighbor === combinedNode) {
+                    return;
+                  }
+
+                  if (incomingNodes[neighbor]) {
+                    incomingNodes[neighbor] = incomingNodes[neighbor] + 1;
+                  } else {
+                    incomingNodes[neighbor] = 1;
+                  }
+                });
+
+                // Get all the outgoing nodes for all combined nodes
+                globalSigmaInstance?.getGraph().forEachOutNeighbor(combinedNode, (neighbor) => {
+                  if (validate(neighbor) || neighbor === combinedNode) {
+                    return;
+                  }
+                  
+                  if (outgoingNodes[neighbor]) {
+                    outgoingNodes[neighbor] = outgoingNodes[neighbor] + 1;
+                  } else {
+                    outgoingNodes[neighbor] = 1;
+                  }
+                });
               });
+              
+              dispatch(removeCombinedNode({ summaryNodeId: data.id, climateConceptNodeId: ccId }));
+
+              // Remove the climate concept node edges also from the summary node
+              const node = await apiClient.getClimateConceptNode(ccId);
+              if (node === null) {
+                return;
+              }
+              
+              try {
+                node.climateConcept.incomingConnections.forEach(id => {
+                  if (!incomingNodes[id]) {
+                    globalSigmaInstance?.getGraph().dropEdge(id, data.id);
+                  }
+                });
+              } catch {}
+              try {
+                node.climateConcept.outgoingConnections.forEach(id => {
+                  if (!outgoingNodes[id]) {
+                    globalSigmaInstance?.getGraph().dropEdge(data.id, id);
+                  }
+                });
+              } catch {}
+            }
+
+            deleteFromSummaryNode();
           });
           break;
         
@@ -260,8 +318,10 @@ function useWebSocket() {
     }
 
     connect();
+
+    return () => ws.close();
     // eslint-disable-next-line
-  }, [globalSigmaInstance, summaryNodesVisible]); 
+  }, [globalSigmaInstance, summaryNodesVisible]);
 }
 
 export default useWebSocket;

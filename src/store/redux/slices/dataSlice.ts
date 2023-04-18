@@ -147,9 +147,16 @@ export const dataSlice = createSlice({
           return;
         }
   
-        state.allSummaryNodes.find(node => node.id === action.payload.summaryNodeId)!.combinedNodes.push(climateConceptNode.climateConcept.id);
+        const summaryNode = state.allSummaryNodes.find(node => node.id === action.payload.summaryNodeId)!;
+        if (!summaryNode.combinedNodes.includes(climateConceptNode.climateConcept.id)) {
+          summaryNode.combinedNodes.push(climateConceptNode.climateConcept.id);
+        }
       } else if (action.payload.climateConceptId) {
-        state.allSummaryNodes.find(node => node.id === action.payload.summaryNodeId)!.combinedNodes.push(action.payload.climateConceptId);
+        const summaryNode = state.allSummaryNodes.find(node => node.id === action.payload.summaryNodeId)!;
+        if (!summaryNode.combinedNodes.includes(action.payload.climateConceptId)) {
+          summaryNode.combinedNodes.push(action.payload.climateConceptId);
+        }
+        // state.allSummaryNodes.find(node => node.id === action.payload.summaryNodeId)!.combinedNodes.push(action.payload.climateConceptId);
       }
       
     },

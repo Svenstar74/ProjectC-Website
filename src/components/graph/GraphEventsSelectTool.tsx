@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 import { ClimateConceptNodesRepository, ToolService } from '@svenstar74/business-logic';
@@ -6,6 +5,7 @@ import { ClimateConceptNodesRepository, ToolService } from '@svenstar74/business
 import { useAppDispatch } from '../../store/redux/hooks';
 import useApiClient from '../../hooks/useApiClient';
 import { setActiveSelection } from '../../store/redux/slices/toolSlice';
+import { CameraState } from 'sigma/types';
 
 export const GraphEventsSelectTool = () => {
   const apiClient = useApiClient();
@@ -31,6 +31,18 @@ export const GraphEventsSelectTool = () => {
 
   let selectionStartGraphX = 0;
   let selectionStartGraphY = 0;
+
+  //#region When zooming in or out, change the node labels font size
+  useEffect(() => {
+    const listener = (state: CameraState) => {
+      sigma.setSetting('labelSize', Math.min(2.5 / state.ratio, 30));
+    };
+
+    sigma.getCamera().on('updated', listener);
+
+    return () => { sigma.getCamera().removeListener('updated', listener) }
+  }, [sigma]);
+  //#endregion
 
   useEffect(() => {
     registerEvents({

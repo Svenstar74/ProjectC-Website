@@ -1,7 +1,7 @@
-import { floatColor } from 'sigma/utils';
-import vertexShaderSource from 'sigma/rendering/webgl/shaders/edge.arrowHead.vert.glsl';
-import fragmentShaderSource from 'sigma/rendering/webgl/shaders/edge.arrowHead.frag.glsl';
-import { AbstractEdgeProgram } from 'sigma/rendering/webgl/programs/common/edge';
+import { floatColor } from 'sigma/utils/index.js';
+import vertexShaderSource from 'sigma/rendering/webgl/shaders/edge.arrowHead.vert.glsl.js';
+import fragmentShaderSource from 'sigma/rendering/webgl/shaders/edge.arrowHead.frag.glsl.js';
+import { AbstractEdgeProgram } from 'sigma/rendering/webgl/programs/common/edge.js';
 
 const POINTS = 3,
   ATTRIBUTES = 9,

@@ -3,7 +3,7 @@ import { ControlsContainer, FullScreenControl, SearchControl, SigmaContainer, Zo
 import '@react-sigma/core/lib/react-sigma.min.css';
 
 import { AppContext } from '../../store/context/AppContext';
-import ArrowEdgeProgram from './customPrograms/edge.arrow';
+import ArrowEdgeProgram from './customPrograms/edge.arrow.js';
 
 import classes from './DisplayGraph.module.css';
 import { GraphEventsMoveTool } from './GraphEventsMoveTool';
