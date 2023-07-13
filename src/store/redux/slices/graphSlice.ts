@@ -11,6 +11,8 @@ interface GraphState {
   contributesToVisible: boolean;
   isAVisible: boolean;
   isEqualToVisible: boolean;
+
+  groupedView: boolean;
 }
 
 const initialState: GraphState = {
@@ -21,6 +23,7 @@ const initialState: GraphState = {
   contributesToVisible: true,
   isAVisible: true,
   isEqualToVisible: true,
+  groupedView: false,
 };
 
 export const graphSlice = createSlice({
@@ -49,6 +52,9 @@ export const graphSlice = createSlice({
     setIsEqualToVisible(state, action: PayloadAction<boolean>) {
       state.isEqualToVisible = action.payload;
     },
+    setGroupedView(state, action: PayloadAction<boolean>) {
+      state.groupedView = action.payload;
+    },
   },
 });
 
@@ -58,6 +64,7 @@ export const {
   setContributesToVisible,
   setIsAVisible,
   setIsEqualToVisible,
+  setGroupedView,
 } = graphSlice.actions;
 
 export default graphSlice.reducer;

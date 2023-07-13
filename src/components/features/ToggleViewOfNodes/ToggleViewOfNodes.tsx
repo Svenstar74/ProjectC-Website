@@ -5,8 +5,12 @@ import GroupWorkOutlinedIcon from '@mui/icons-material/GroupWorkOutlined';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 
 import { ConnectionUseCases } from 'business-logic';
+import { useAppDispatch } from '../../../store/redux/hooks';
+import { setGroupedView } from '../../../store/redux/slices/graphSlice';
 
 function ToggleViewOfNodes() {
+  const dispatch = useAppDispatch();
+  
   const sigma = useSigma();
   const [showGroupedNodes, setShowGroupedNodes] = useState(false);
 
@@ -42,6 +46,8 @@ function ToggleViewOfNodes() {
   }
   
   async function switchView() {
+    dispatch(setGroupedView(!showGroupedNodes));
+    
     const connections = sigma.getGraph().edges().map(edgeId => {
       return {
         id: edgeId,

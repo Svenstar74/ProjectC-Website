@@ -5,9 +5,12 @@ import { useRegisterEvents, useSigma } from '@react-sigma/core';
 
 import { ConnectionUseCases, IClimateConceptNode, INode, NodeUseCases } from 'business-logic';
 import useApiClient from '../../hooks/useApiClient';
+import { useAppSelector } from '../../../store/redux/hooks';
 
 function SelectToolGraphEvents() {
   const apiClient = useApiClient();
+  const groupedView = useAppSelector((state) => state.graph.groupedView);
+  
   const sigma = useSigma();
   const registerEvents = useRegisterEvents();
 
@@ -209,6 +212,22 @@ function SelectToolGraphEvents() {
     // eslint-disable-next-line
   }, [registerEvents, sigma, isUsingSelectTool]);
 
+  useEffect(() => {
+    if (groupedView) {
+      setIsUsingSelectTool(false);
+      dragActive = false;
+      selectionActive = false;
+      selectedNodes = [];
+      sigma.getGraph().forEachNode((node) => {
+        sigma.getGraph().setNodeAttribute(node, 'highlighted', false);
+      });
+    }
+  }, [groupedView]);
+  
+  if (groupedView) {
+    return null;
+  }
+  
   return (
     <div style={{ position: 'absolute', right: 10, top: 200 }}>
       <Tooltip title='Rectangular Selection'>
