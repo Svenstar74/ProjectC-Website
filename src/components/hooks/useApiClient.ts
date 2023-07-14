@@ -1,7 +1,6 @@
 import { TConnectionType } from "business-logic";
 
-const BASE_URL = 'http://localhost:3000';
-// const BASE_URL = 'https://www.project-c-test-backend.de';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function useApiClient() {
   async function getAllClimateConceptNodes() {
