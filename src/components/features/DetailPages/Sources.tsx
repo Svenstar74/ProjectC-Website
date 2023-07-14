@@ -67,9 +67,9 @@ function Sources({ id, endpoint, sources }: Props) {
         {showNewSource && <NewSource onAddSource={addSource} />}
 
         <List dense>
-          {sourceList.map((source, index) => (
+          {sourceList.map((source) => (
             <Source
-              key={index}
+              key={source.url + source.originalText}
               id={id}
               url={source.url}
               originalText={source.originalText}
