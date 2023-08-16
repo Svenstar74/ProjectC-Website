@@ -1,6 +1,5 @@
-import { ControlsContainer, FullScreenControl, SigmaContainer, ZoomControl } from '@react-sigma/core';
-
 import '@react-sigma/core/lib/react-sigma.min.css';
+import { ControlsContainer, FullScreenControl, SigmaContainer, ZoomControl } from '@react-sigma/core';
 
 import LoadGraphFromMongoDb from './features/LoadGraphFromMongoDb/LoadGraphFromMongoDb';
 
