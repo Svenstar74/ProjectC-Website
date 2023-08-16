@@ -17,8 +17,9 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
 
   const [needsReview, setNeedsReview] = useState<boolean>();
   const [needsCorrection, setNeedsCorrection] = useState<boolean>();
+  const [isReviewed, setIsReviewed] = useState<boolean>();
 
-  function handleReviewChipClicked() {
+  function handleNeedsReviewChipClicked() {
     if (!object) {
       return;
     }
@@ -35,7 +36,7 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
     }
   }
 
-  function handleCorrectionChipClicked() {
+  function handleNeedsCorrectionChipClicked() {
     if (!object) {
       return;
     }
@@ -53,9 +54,28 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
     }
   }
   
+  function handleIsReviewedChipClicked() {
+    if (!object) {
+      return;
+    }
+
+    object.isReviewed = !isReviewed;
+    setIsReviewed((prev) => !prev);
+
+    apiClient.updateIsReviewedLabel(object.id, object.isReviewed, endpoint);
+    const color = ValidatableUseCases.getColor(object, type)
+
+    if (type === 'node') {
+      sigma.getGraph().setNodeAttribute(object.id, 'color', color)
+    } else if (type === 'edge') {
+      sigma.getGraph().setEdgeAttribute(object.id, 'color', color)
+    }
+  }
+  
   useEffect(() =>  {
     setNeedsReview(object.needsReview);
     setNeedsCorrection(object.needsCorrection);
+    setIsReviewed(object.isReviewed);
   }, [object])
   
   return (
@@ -63,11 +83,11 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
       <Chip
         label="Needs Review"
         size="small"
-        onClick={handleReviewChipClicked}
+        onClick={handleNeedsReviewChipClicked}
         style={{
           marginBottom: 20,
           marginRight: '10px',
-          background: needsReview ? '#006080' : '#eee',
+          background: needsReview ? '#008bff' : '#eee',
           color: needsReview ? 'white' : 'black',
         }}
       />
@@ -75,11 +95,23 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
       <Chip
         label="Needs Correction"
         size="small"
-        onClick={handleCorrectionChipClicked}
+        onClick={handleNeedsCorrectionChipClicked}
         style={{
           marginBottom: 20,
-          background: needsCorrection ? '#801a00' : '#eee',
+          marginRight: '10px',
+          background: needsCorrection ? '#ff0000' : '#eee',
           color: needsCorrection ? 'white' : 'black',
+        }}
+      />
+
+      <Chip
+        label="Is Reviewed"
+        size="small"
+        onClick={handleIsReviewedChipClicked}
+        style={{
+          marginBottom: 20,
+          background: isReviewed ? '#25b012' : '#eee',
+          color: isReviewed ? 'white' : 'black',
         }}
       />
     </>

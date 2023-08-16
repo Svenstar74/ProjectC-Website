@@ -135,6 +135,16 @@ function useApiClient() {
     });
   }
   
+  async function updateIsReviewedLabel(id: string, newValue: boolean, endpoint: '/climate-concept-nodes' | '/connections') {
+    await fetch(BASE_URL + `${endpoint}/${id}/is-reviewed`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ isReviewed: newValue }),
+    });
+  }
+  
   return {
     getAllClimateConceptNodes,
     getClimateConceptNode,
@@ -154,6 +164,7 @@ function useApiClient() {
     deleteSource,
     updateNeedsReviewLabel,
     updateNeedsCorrectionLabel,
+    updateIsReviewedLabel,
   };
 }
 
