@@ -18,7 +18,8 @@ import Searchbar from './features/Searchbar/Searchbar';
 import ToggleViewOfNodes from './features/ToggleViewOfNodes/ToggleViewOfNodes';
 import AddConnectionSnackbar from './features/AddConnection/AddConnectionSnackbar';
 import ToggleViewEdgeTypes from './features/ToggleViewEdgeTypes/ToggleViewButtons';
-import SelectToolGraphEvents from './features/SelectTool/SelectToolGraphEvents';
+import LoginIcon from './features/LoginIcon/LoginIcon';
+// import SelectToolGraphEvents from './features/SelectTool/SelectToolGraphEvents';
 // import GetHelpButton from './features/GetHelpButton/GetHelpButton';
 
 function DisplayGraph() {  
@@ -63,6 +64,8 @@ function DisplayGraph() {
 
       <AddConnectionSnackbar />
       
+      <LoginIcon />
+      
       <ResponsiveLabelSize />
       <DoubleClickStageBehavior />
 
@@ -72,7 +75,7 @@ function DisplayGraph() {
       <ToggleViewOfNodes />
       <DetailPages />
       
-      <SelectToolGraphEvents />
+      {/* <SelectToolGraphEvents /> */}
       
       <RightClickStage />
       <RightClickEdge />

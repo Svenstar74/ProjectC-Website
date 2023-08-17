@@ -3,12 +3,10 @@ import { Fab, Tooltip } from '@mui/material';
 import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 
-import { ConnectionUseCases, IClimateConceptNode, INode, NodeUseCases } from 'business-logic';
-import useApiClient from '../../hooks/useApiClient';
+import { IClimateConceptNode, INode, NodeUseCases } from 'business-logic';
 import { useAppSelector } from '../../../store/redux/hooks';
 
 function SelectToolGraphEvents() {
-  const apiClient = useApiClient();
   const groupedView = useAppSelector((state) => state.graph.groupedView);
   
   const sigma = useSigma();
@@ -95,40 +93,40 @@ function SelectToolGraphEvents() {
         }
 
         if (dragActive) {
-          const coords = sigma.viewportToGraph(event);
-          const dx = coords.x - dragStart.x;
-          const dy =  coords.y - dragStart.y;
+          // const coords = sigma.viewportToGraph(event);
+          // const dx = coords.x - dragStart.x;
+          // const dy =  coords.y - dragStart.y;
 
-          selectedNodes.forEach((node) => {
-            const attributes = sigma.getGraph().getNodeAttributes(node.id);
+        //   selectedNodes.forEach((node) => {
+        //     const attributes = sigma.getGraph().getNodeAttributes(node.id);
 
-            if (attributes.size === 5) {
-              const connections = sigma.getGraph().edges().map(edgeId => {
-                return {
-                  id: edgeId,
-                  sourceId: sigma.getGraph().source(edgeId),
-                  targetId: sigma.getGraph().target(edgeId),
-                  type: sigma.getGraph().getEdgeAttribute(edgeId, 'connectionType')
-                };
-              });
+        //     if (attributes.size === 5) {
+        //       const connections = sigma.getGraph().edges().map(edgeId => {
+        //         return {
+        //           id: edgeId,
+        //           sourceId: sigma.getGraph().source(edgeId),
+        //           targetId: sigma.getGraph().target(edgeId),
+        //           type: sigma.getGraph().getEdgeAttribute(edgeId, 'connectionType')
+        //         };
+        //       });
 
-              console.log(ConnectionUseCases.getGroupedNodesForNode(node.id, connections))
-              ConnectionUseCases.getGroupedNodesForNode(node.id, connections).forEach((id) => {
-                const startX = sigma.getGraph().getNodeAttribute(id, 'x');
-                const startY = sigma.getGraph().getNodeAttribute(id, 'y');
+        //       console.log(ConnectionUseCases.getGroupedNodesForNode(node.id, connections))
+        //       ConnectionUseCases.getGroupedNodesForNode(node.id, connections).forEach((id) => {
+        //         const startX = sigma.getGraph().getNodeAttribute(id, 'x');
+        //         const startY = sigma.getGraph().getNodeAttribute(id, 'y');
 
-                console.log(`Moved id ${id} from ${startX}, ${startY} to ${startX + dx}, ${startY + dy}`);
-              //   apiClient.updateClimateConceptNodePosition(
-              //     node
-              });
-            } else {
-              apiClient.updateClimateConceptNodePosition(
-                node.id,
-                attributes.x,
-                attributes.y
-              );
-            }
-          });
+        //         console.log(`Moved id ${id} from ${startX}, ${startY} to ${startX + dx}, ${startY + dy}`);
+        //       //   apiClient.updateClimateConceptNodePosition(
+        //       //     node
+        //       });
+        //     } else {
+        //       apiClient.updateClimateConceptNodePosition(
+        //         node.id,
+        //         attributes.x,
+        //         attributes.y
+        //       );
+        //     }
+        //   });
         }
 
         if (event.original.button === 0) {
@@ -148,6 +146,7 @@ function SelectToolGraphEvents() {
               // Could refactor the selection tool to take a different list.
               needsReview: false,
               needsCorrection: false,
+              isReviewed: false,
               sources: [],
             });
           });

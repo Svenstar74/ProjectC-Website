@@ -139,7 +139,7 @@ function ToggleViewOfNodes() {
   }
 
   return (
-    <div style={{ position: 'absolute', right: 60, top: 10 }}>
+    <div style={{ position: 'absolute', right: 50, top: 70 }}>
       <Tooltip title={showGroupedNodes ? 'Show Individual Nodes' : 'Show Grouped Nodes'}>
         <Fab size='small' style={{ background: 'white' }} onClick={switchView}>
           {showGroupedNodes ? <ScatterPlotIcon /> : <GroupWorkOutlinedIcon />}
