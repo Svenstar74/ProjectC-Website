@@ -5,6 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import NewSource from './NewSource';
 import Source from './Source';
 import useApiClient from '../../hooks/useApiClient';
+import { useAppSelector } from '../../../store/redux/hooks';
 
 interface Props {
   id: string;
@@ -13,6 +14,7 @@ interface Props {
 }
 
 function Sources({ id, endpoint, sources }: Props) {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const apiClient = useApiClient();
 
   const [sourceList, setSourceList] = useState(sources);
@@ -56,13 +58,15 @@ function Sources({ id, endpoint, sources }: Props) {
       </AccordionSummary>
       <AccordionDetails>
 
-        <Button
-          fullWidth
-          variant="outlined"
-          onClick={() => setShowNewSource((prev) => !prev)}
-        >
-          Add new Source
-        </Button>
+        {isLoggedIn &&
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={() => setShowNewSource((prev) => !prev)}
+          >
+            Add new Source
+          </Button>
+        }
 
         {showNewSource && <NewSource onAddSource={addSource} />}
 

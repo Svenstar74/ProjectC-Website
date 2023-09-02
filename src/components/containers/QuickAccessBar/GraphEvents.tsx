@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 import { Paper } from '@mui/material';
+import { useAppSelector } from '../../../store/redux/hooks';
 
 interface Props {
   children: React.ReactNode;
@@ -12,6 +13,8 @@ interface ChildProps {
 }
 
 function GraphEvents({ children }: Props) {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  
   const sigma = useSigma();
   const registerEvents = useRegisterEvents();
 
@@ -98,6 +101,10 @@ function GraphEvents({ children }: Props) {
   });
 
   if (nodeIsMoving) {
+    return null;
+  }
+
+  if (!isLoggedIn) {
     return null;
   }
   

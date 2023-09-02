@@ -9,12 +9,14 @@ import ConfirmDialog from '../../dialogs/ConfirmDialog';
 import ReviewCorrectionChips from './ReviewCorrectionChips';
 import useApiClient from '../../hooks/useApiClient';
 import { IClimateConceptNode, IConnection } from 'business-logic';
+import { useAppSelector } from '../../../store/redux/hooks';
 
 interface Props {
   edgeId: string;
 }
 
 function EdgeDetails({ edgeId }: Props) {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const apiClient = useApiClient();
   const sigma = useSigma();
 
@@ -152,25 +154,34 @@ function EdgeDetails({ edgeId }: Props) {
                 >
                   <ListItemText>{expanded ? 'Hide Details' : 'Show Details'}</ListItemText>
                 </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    setAnchorEl(null);
-                    setOpenEditDialogSource(true);
-                  }}
-                >
-                  Edit String Representation (Cause)
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    setAnchorEl(null);
-                    setOpenEditDialogTarget(true);
-                  }}
-                >
-                  Edit String Representation (Effect)
-                </MenuItem>
-                <MenuItem onClick={() => setShowConfirmationModal(true) }>
-                  Delete Edge
-                </MenuItem>
+
+                {isLoggedIn &&
+                  <MenuItem
+                    onClick={() => {
+                      setAnchorEl(null);
+                      setOpenEditDialogSource(true);
+                    }}
+                  >
+                    Edit String Representation (Cause)
+                  </MenuItem>
+                }
+
+                {isLoggedIn &&
+                  <MenuItem
+                    onClick={() => {
+                      setAnchorEl(null);
+                      setOpenEditDialogTarget(true);
+                    }}
+                  >
+                    Edit String Representation (Effect)
+                  </MenuItem>
+                }
+
+                {isLoggedIn &&
+                  <MenuItem onClick={() => setShowConfirmationModal(true) }>
+                    Delete Edge
+                  </MenuItem>
+                }
               </Menu>
             </>
           }
@@ -191,6 +202,7 @@ function EdgeDetails({ edgeId }: Props) {
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
               <div>Cause ID: {source.id} &ensp;</div>
               <div>Effect ID: {target.id}</div>
+              <div>{`Created by ${connection.createdBy} on ${new Date(connection.createdAt).toLocaleString()}`}</div>
             </div>
           }
           subheaderTypographyProps={{ variant: 'body2' }}
@@ -199,7 +211,7 @@ function EdgeDetails({ edgeId }: Props) {
           <CardContent>
 
             <div style={{ display: 'block', marginBottom: 25 }}>
-              <FormControl fullWidth>
+              <FormControl fullWidth disabled>
                 <InputLabel id="connection-type-label">Connection Type</InputLabel>
                 <Select
                   size="small"
@@ -207,6 +219,7 @@ function EdgeDetails({ edgeId }: Props) {
                   value={connectionType}
                   label="Connection Type"
                   onChange={changeConnectionType}
+                  disabled={!isLoggedIn}
                 >
                   <MenuItem value="contributesTo">contributesTo</MenuItem>
                   <MenuItem value="isA">isA</MenuItem>

@@ -9,7 +9,12 @@ interface Props {
 
 function LoginDialog({ show, onClose, onLogin }: Props) {
   const [userName, setUserName] = useState('');
-  
+
+  function onLoginClick() {
+    onLogin(userName);
+    setUserName('');
+  }
+
   return (
     <Dialog open={show} onClose={onClose}>
       <Box style={{ maxWidth: 500 }}>
@@ -27,7 +32,7 @@ function LoginDialog({ show, onClose, onLogin }: Props) {
 
         <DialogActions style={{ marginRight: 10 }}>
           <Button onClick={onClose}>Cancel</Button>
-          <Button onClick={() => onLogin(userName)} disabled={userName === ''}>Login</Button>
+          <Button onClick={onLoginClick} disabled={userName.trim() === ''}>Login</Button>
         </DialogActions>
 
       </Box>

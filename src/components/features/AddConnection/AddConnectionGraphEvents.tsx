@@ -5,6 +5,7 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import { eventBus } from '../../../eventBus';
 import useApiClient from '../../hooks/useApiClient';
+import { useAppSelector } from '../../../store/redux/hooks';
 
 interface Props {
   hoveredNode: string | null;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 function GraphEvents({ hoveredNode, hideQab }: Props) {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const apiClient = useApiClient();
   
   const sigma = useSigma();
@@ -91,6 +93,10 @@ function GraphEvents({ hoveredNode, hideQab }: Props) {
     }
   }, [hoveredNode, makingConnection]);
 
+  if (!isLoggedIn) {
+    return null;
+  }
+  
   return (
     <>
       <Tooltip title='Make contributesTo Connection'>

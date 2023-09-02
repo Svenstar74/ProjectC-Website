@@ -9,12 +9,14 @@ import ConfirmDialog from "../../dialogs/ConfirmDialog";
 import ReviewCorrectionChips from "./ReviewCorrectionChips";
 import { IClimateConceptNode } from "business-logic";
 import useApiClient from "../../hooks/useApiClient";
+import { useAppSelector } from "../../../store/redux/hooks";
 
 interface Props {
   climateConceptId: string;
 }
 
 function ClimateConceptNodeDetails({ climateConceptId }: Props) {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const apiClient = useApiClient();
   const sigma = useSigma();
   
@@ -102,23 +104,35 @@ function ClimateConceptNodeDetails({ climateConceptId }: Props) {
                     {expanded ? 'Hide Details' : 'Show Details'}
                   </ListItemText>
                 </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    setAnchorEl(null);
-                    setOpenEditDialog(true);
-                  }}
-                >
-                  Edit String Representation
-                </MenuItem>
-                <MenuItem onClick={() => setShowConfirmationModal(true)}>
-                  Delete Node
-                </MenuItem>
+                
+                {isLoggedIn &&
+                  <MenuItem
+                    onClick={() => {
+                      setAnchorEl(null);
+                      setOpenEditDialog(true);
+                    }}
+                  >
+                    Edit String Representation
+                  </MenuItem>
+                }
+
+                {isLoggedIn &&
+                  <MenuItem onClick={() => setShowConfirmationModal(true)}>
+                    Delete Node
+                  </MenuItem>
+                }
+                
               </Menu>
             </>
           }
           title={climateConceptNode.name}
           titleTypographyProps={{ variant: 'body1' }}
-          subheader={`ID ${climateConceptId}`}
+          subheader={
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div>ID {climateConceptId}</div>
+              <div>Created by {climateConceptNode.createdBy} on {new Date(climateConceptNode.createdAt).toLocaleString()}</div>
+            </div>
+          }
           subheaderTypographyProps={{ variant: 'body2' }}
         />
         

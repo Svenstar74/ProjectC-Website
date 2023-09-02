@@ -5,8 +5,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import ConfirmDialog from '../../dialogs/ConfirmDialog';
 import useApiClient from '../../hooks/useApiClient';
+import { useAppSelector } from '../../../store/redux/hooks';
 
 function GraphEvents() {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const apiClient = useApiClient();
   
   const sigma = useSigma();
@@ -37,6 +39,10 @@ function GraphEvents() {
       },
     });
   }, [sigma, registerEvents]);
+
+  if (!isLoggedIn) {
+    return null;
+  }
 
   return (
     <>

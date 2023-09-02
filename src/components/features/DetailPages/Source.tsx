@@ -4,6 +4,7 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import ConfirmDialog from '../../dialogs/ConfirmDialog';
+import { useAppSelector } from '../../../store/redux/hooks';
 
 interface Props {
   id: string;
@@ -22,6 +23,7 @@ function Source({
   originalText,
   onDeleteSource,
 }: Props) {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   function confirmDeleteSource() {
@@ -67,13 +69,15 @@ function Source({
           }}
         />
 
-        <Tooltip title="Delete Source" style={{ float: 'right' }}>
-          <span>
-            <IconButton onClick={() => setShowConfirmDialog(true)}>
-              <DeleteIcon/>
-            </IconButton>
-          </span>
-        </Tooltip>
+        {isLoggedIn &&
+          <Tooltip title="Delete Source" style={{ float: 'right' }}>
+            <span>
+              <IconButton onClick={() => setShowConfirmDialog(true)}>
+                <DeleteIcon/>
+              </IconButton>
+            </span>
+          </Tooltip>
+        }
       </div>
 
       <ConfirmDialog

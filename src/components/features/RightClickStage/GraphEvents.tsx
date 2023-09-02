@@ -3,8 +3,10 @@ import { useRegisterEvents, useSigma } from '@react-sigma/core';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import AddNodeDialog from './AddNodeDialog';
+import { useAppSelector } from '../../../store/redux/hooks';
 
 function GraphEvents() {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const sigma = useSigma();
   const registerEvents = useRegisterEvents();
 
@@ -25,6 +27,10 @@ function GraphEvents() {
       }
     });
   }, [sigma, registerEvents]);
+
+  if (!isLoggedIn) {
+    return null;
+  }
 
   return (
     <>

@@ -148,6 +148,8 @@ function SelectToolGraphEvents() {
               needsCorrection: false,
               isReviewed: false,
               sources: [],
+              createdAt: '',
+              createdBy: '',
             });
           });
 

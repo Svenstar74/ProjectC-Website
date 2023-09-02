@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 import useApiClient from '../../hooks/useApiClient';
+import { useAppSelector } from '../../../store/redux/hooks';
 
 function GraphEvents() {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const apiClient = useApiClient();
   
   const sigma = useSigma();
@@ -14,7 +16,7 @@ function GraphEvents() {
   useEffect(() => {
     registerEvents({
       downNode(e) {
-        if (e.event.original.button === 0 && !isNaN(e.node)) {
+        if (e.event.original.button === 0 && !isNaN(e.node) && isLoggedIn) {
           setDraggedNode(e.node);
           setStartPos({ x: e.event.x, y: e.event.y });
         }
@@ -43,7 +45,7 @@ function GraphEvents() {
         setDraggedNode(null);
       },
     });
-  }, [sigma, registerEvents, draggedNode]);
+  }, [sigma, registerEvents, draggedNode, isLoggedIn]);
 
   return null;
 }

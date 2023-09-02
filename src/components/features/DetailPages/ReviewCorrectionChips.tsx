@@ -4,6 +4,7 @@ import { useSigma } from "@react-sigma/core";
 
 import { IIndexable, IValidatable, ValidatableUseCases } from "business-logic";
 import useApiClient from "../../hooks/useApiClient";
+import { useAppSelector } from "../../../store/redux/hooks";
 
 interface Props {
   endpoint: '/climate-concept-nodes' | '/connections';
@@ -12,6 +13,7 @@ interface Props {
 }
 
 function ReviewCorrectionChips({ endpoint, object, type }: Props) {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const apiClient = useApiClient();
   const sigma = useSigma();
 
@@ -20,7 +22,7 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
   const [isReviewed, setIsReviewed] = useState<boolean>();
 
   function handleNeedsReviewChipClicked() {
-    if (!object) {
+    if (!object || !isLoggedIn) {
       return;
     }
     object.needsReview = !needsReview;
@@ -37,7 +39,7 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
   }
 
   function handleNeedsCorrectionChipClicked() {
-    if (!object) {
+    if (!object || !isLoggedIn) {
       return;
     }
 
@@ -55,7 +57,7 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
   }
   
   function handleIsReviewedChipClicked() {
-    if (!object) {
+    if (!object || !isLoggedIn) {
       return;
     }
 
@@ -89,6 +91,7 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
           marginRight: '10px',
           background: needsReview ? '#008bff' : '#eee',
           color: needsReview ? 'white' : 'black',
+          cursor: isLoggedIn ? 'pointer' : 'default',
         }}
       />
 
@@ -101,6 +104,7 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
           marginRight: '10px',
           background: needsCorrection ? '#ff0000' : '#eee',
           color: needsCorrection ? 'white' : 'black',
+          cursor: isLoggedIn ? 'pointer' : 'default',
         }}
       />
 
@@ -112,6 +116,7 @@ function ReviewCorrectionChips({ endpoint, object, type }: Props) {
           marginBottom: 20,
           background: isReviewed ? '#25b012' : '#eee',
           color: isReviewed ? 'white' : 'black',
+          cursor: isLoggedIn ? 'pointer' : 'default',
         }}
       />
     </>

@@ -1,8 +1,11 @@
 import { TConnectionType } from "business-logic";
+import { useAppSelector } from "../../store/redux/hooks";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function useApiClient() {
+  const userName = useAppSelector(state => state.auth.userName);
+  
   async function getAllClimateConceptNodes() {
     const response = await fetch(BASE_URL + '/climate-concept-nodes');
     const data = await response.json();
@@ -33,7 +36,7 @@ function useApiClient() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, x, y }),
+      body: JSON.stringify({ name, x, y, createdBy: userName }),
     });
 
     const data = await response.json();
@@ -72,7 +75,7 @@ function useApiClient() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ sourceId, targetId, type }),
+      body: JSON.stringify({ sourceId, targetId, type, createdBy: userName }),
     });
 
     const data = await response.json();
