@@ -19,7 +19,7 @@ import ToggleViewOfNodes from './features/ToggleViewOfNodes/ToggleViewOfNodes';
 import AddConnectionSnackbar from './features/AddConnection/AddConnectionSnackbar';
 import ToggleViewEdgeTypes from './features/ToggleViewEdgeTypes/ToggleViewButtons';
 import LoginIcon from './features/LoginIcon/LoginIcon';
-// import SelectToolGraphEvents from './features/SelectTool/SelectToolGraphEvents';
+import SelectToolGraphEvents from './features/SelectTool/SelectToolGraphEvents';
 // import GetHelpButton from './features/GetHelpButton/GetHelpButton';
 
 function DisplayGraph() {  
@@ -75,7 +75,7 @@ function DisplayGraph() {
       <ToggleViewOfNodes />
       <DetailPages />
       
-      {/* <SelectToolGraphEvents /> */}
+      <SelectToolGraphEvents />
       
       <RightClickStage />
       <RightClickEdge />

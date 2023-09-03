@@ -3,12 +3,14 @@ import { Fab, Tooltip } from '@mui/material';
 import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 
-import { IClimateConceptNode, INode, NodeUseCases } from 'business-logic';
+import { ConnectionUseCases, IClimateConceptNode, INode, NodeUseCases } from 'business-logic';
 import { useAppSelector } from '../../../store/redux/hooks';
+import useApiClient from '../../hooks/useApiClient';
 
 function SelectToolGraphEvents() {
   const groupedView = useAppSelector((state) => state.graph.groupedView);
   
+  const apiClient = useApiClient();
   const sigma = useSigma();
   const registerEvents = useRegisterEvents();
 
@@ -93,40 +95,54 @@ function SelectToolGraphEvents() {
         }
 
         if (dragActive) {
-          // const coords = sigma.viewportToGraph(event);
-          // const dx = coords.x - dragStart.x;
-          // const dy =  coords.y - dragStart.y;
+          const coords = sigma.viewportToGraph(event);
+          const dx = coords.x - dragStart.x;
+          const dy =  coords.y - dragStart.y;
 
-        //   selectedNodes.forEach((node) => {
-        //     const attributes = sigma.getGraph().getNodeAttributes(node.id);
+          selectedNodes.forEach((node) => {
+            const attributes = sigma.getGraph().getNodeAttributes(node.id);
 
-        //     if (attributes.size === 5) {
-        //       const connections = sigma.getGraph().edges().map(edgeId => {
-        //         return {
-        //           id: edgeId,
-        //           sourceId: sigma.getGraph().source(edgeId),
-        //           targetId: sigma.getGraph().target(edgeId),
-        //           type: sigma.getGraph().getEdgeAttribute(edgeId, 'connectionType')
-        //         };
-        //       });
+            if (attributes.size === 5) {
+              const connections = sigma.getGraph().edges().map(edgeId => {
+                return {
+                  id: edgeId,
+                  sourceId: sigma.getGraph().source(edgeId),
+                  targetId: sigma.getGraph().target(edgeId),
+                  type: sigma.getGraph().getEdgeAttribute(edgeId, 'connectionType')
+                };
+              });
 
-        //       console.log(ConnectionUseCases.getGroupedNodesForNode(node.id, connections))
-        //       ConnectionUseCases.getGroupedNodesForNode(node.id, connections).forEach((id) => {
-        //         const startX = sigma.getGraph().getNodeAttribute(id, 'x');
-        //         const startY = sigma.getGraph().getNodeAttribute(id, 'y');
+              const foundNodeId = sigma.getGraph().findNode(node => {
+                const nodeAttributes = sigma.getGraph().getNodeAttributes(node);
+                return nodeAttributes.x === attributes.x && nodeAttributes.y === attributes.y;
+              })
 
-        //         console.log(`Moved id ${id} from ${startX}, ${startY} to ${startX + dx}, ${startY + dy}`);
-        //       //   apiClient.updateClimateConceptNodePosition(
-        //       //     node
-        //       });
-        //     } else {
-        //       apiClient.updateClimateConceptNodePosition(
-        //         node.id,
-        //         attributes.x,
-        //         attributes.y
-        //       );
-        //     }
-        //   });
+              const groupedNodes = ConnectionUseCases.getAllSummaryNodesWithConnections(connections).groupedNodes;
+              const foundGroup = groupedNodes.find(group => group.some(obj => obj.id === foundNodeId));
+
+              if (foundGroup) {
+                foundGroup.forEach((node) => {
+                  if (node.id === foundNodeId) {
+                    return;
+                  }
+                  
+                  const startX = sigma.getGraph().getNodeAttribute(node.id, 'x');
+                  const startY = sigma.getGraph().getNodeAttribute(node.id, 'y');
+
+                  sigma.getGraph().setNodeAttribute(node.id, 'x', startX + dx);
+                  sigma.getGraph().setNodeAttribute(node.id, 'y', startY + dy);
+                  
+                  apiClient.updateClimateConceptNodePosition(node.id, startX + dx, startY + dy);
+                });
+              }
+            } else {
+              apiClient.updateClimateConceptNodePosition(
+                node.id,
+                attributes.x,
+                attributes.y
+              );
+            }
+          });
         }
 
         if (event.original.button === 0) {
@@ -224,10 +240,7 @@ function SelectToolGraphEvents() {
       });
     }
   }, [groupedView]);
-  
-  if (groupedView) {
-    return null;
-  }
+
   
   return (
     <div style={{ position: 'absolute', right: 10, top: 200 }}>
