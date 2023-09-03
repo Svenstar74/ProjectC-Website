@@ -8,6 +8,7 @@ import { useAppSelector } from '../../../store/redux/hooks';
 import useApiClient from '../../hooks/useApiClient';
 
 function SelectToolGraphEvents() {
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const groupedView = useAppSelector((state) => state.graph.groupedView);
   
   const apiClient = useApiClient();
@@ -241,6 +242,9 @@ function SelectToolGraphEvents() {
     }
   }, [groupedView]);
 
+  if (!isLoggedIn) {
+    return null;
+  }
   
   return (
     <div style={{ position: 'absolute', right: 10, top: 200 }}>
