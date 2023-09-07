@@ -1,11 +1,11 @@
-import { TConnectionType } from "business-logic";
+import { IComment, TConnectionType } from "business-logic";
 import { useAppSelector } from "../../store/redux/hooks";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function useApiClient() {
   const userName = useAppSelector(state => state.auth.userName);
-  
+
   async function getAllClimateConceptNodes() {
     const response = await fetch(BASE_URL + '/climate-concept-nodes');
     const data = await response.json();
@@ -17,7 +17,7 @@ function useApiClient() {
     const data = await response.json();
     return data.data;
   }
-  
+
   async function getAllConnections() {
     const response = await fetch(BASE_URL + '/connections');
     const data = await response.json();
@@ -29,7 +29,7 @@ function useApiClient() {
     const data = await response.json();
     return data.data;
   }
-  
+
   async function createClimateConceptNode(name: string, x: number, y: number) {
     const response = await fetch(BASE_URL + '/climate-concept-nodes', {
       method: 'POST',
@@ -91,7 +91,7 @@ function useApiClient() {
       body: JSON.stringify({ type }),
     });
   }
-  
+
   async function deleteConnection(id: string) {
     await fetch(BASE_URL + `/connections/${id}`, {
       method: 'DELETE',
@@ -107,7 +107,7 @@ function useApiClient() {
       body: JSON.stringify({ url, originalText }),
     });
   }
-  
+
   async function deleteSource(id: string, url: string, originalText: string, endpoint: '/climate-concept-nodes' | '/connections') {
     await fetch(BASE_URL + `${endpoint}/${id}/sources`, {
       method: 'DELETE',
@@ -137,7 +137,7 @@ function useApiClient() {
       body: JSON.stringify({ needsCorrection: newValue }),
     });
   }
-  
+
   async function updateIsReviewedLabel(id: string, newValue: boolean, endpoint: '/climate-concept-nodes' | '/connections') {
     await fetch(BASE_URL + `${endpoint}/${id}/is-reviewed`, {
       method: 'PUT',
@@ -147,7 +147,26 @@ function useApiClient() {
       body: JSON.stringify({ isReviewed: newValue }),
     });
   }
-  
+
+  async function getCommentsForReferenceId(referenceId: string) {
+    const response = await fetch(BASE_URL + `/comments/reference/${referenceId}`);
+    const data = await response.json();
+    return data.data;
+  }
+
+  async function createComment(referenceId: string, text: string): Promise<IComment> {
+    const response = await fetch(BASE_URL + '/comments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text, referenceId, createdBy: userName }),
+    });
+
+    const data = await response.json();
+    return data.data;
+  }
+
   return {
     getAllClimateConceptNodes,
     getClimateConceptNode,
@@ -168,6 +187,9 @@ function useApiClient() {
     updateNeedsReviewLabel,
     updateNeedsCorrectionLabel,
     updateIsReviewedLabel,
+
+    getCommentsForReferenceId,
+    createComment,
   };
 }
 

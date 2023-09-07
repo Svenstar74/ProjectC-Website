@@ -8,8 +8,9 @@ import Sources from './Sources';
 import ConfirmDialog from '../../dialogs/ConfirmDialog';
 import ReviewCorrectionChips from './ReviewCorrectionChips';
 import useApiClient from '../../hooks/useApiClient';
-import { IClimateConceptNode, IConnection } from 'business-logic';
+import { IClimateConceptNode, IComment, IConnection } from 'business-logic';
 import { useAppSelector } from '../../../store/redux/hooks';
+import Comments from './Comments';
 
 interface Props {
   edgeId: string;
@@ -24,6 +25,8 @@ function EdgeDetails({ edgeId }: Props) {
   const [openEditDialogSource, setOpenEditDialogSource] = useState(false);
   const [openEditDialogTarget, setOpenEditDialogTarget] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
+  const [comments, setComments] = useState<IComment[]>([]);
 
   function onDeleteEdge() {
     apiClient.deleteConnection(edgeId)
@@ -101,6 +104,11 @@ function EdgeDetails({ edgeId }: Props) {
     apiClient.getConnection(edgeId).then((connection) => {
       setConnection(connection);
       setConnectionType(connection.type);
+
+      apiClient.getCommentsForReferenceId(edgeId)
+        .then((comments) => {
+          setComments(comments);
+        })
 
       apiClient.getClimateConceptNode(connection.sourceId).then((source) => {
           setSource(source);
@@ -230,6 +238,7 @@ function EdgeDetails({ edgeId }: Props) {
 
             <ReviewCorrectionChips endpoint='/connections' object={connection} type='edge' />
 
+            <Comments id={edgeId} comments={comments} />
             <Sources id={edgeId} endpoint='/connections' sources={connection.sources} />
               
           </CardContent>
