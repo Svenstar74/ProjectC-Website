@@ -50,7 +50,7 @@ function DisplayGraph() {
         labelSize: 2.5,
       }}
       style={{ width: '100vw', height: '100vh', backgroundColor: '#eee' }}
-    >      
+    >
       <ControlsContainer position="top-right">
         <ZoomControl />
         <FullScreenControl />
