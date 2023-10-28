@@ -63,7 +63,7 @@ function GraphEvents({ children }: Props) {
   useEffect(() => {
     registerEvents({
       enterNode(e) {
-        if (isNaN(e.node)) return;
+        if (isNaN(+e.node)) return;
 
         if (sigma.getCamera().ratio < 0.37) {
           updateQabPosition(e.node);

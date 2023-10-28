@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type LastSelected = 'ClimateConceptNode' | 'SummaryNode' | 'Edge' | null
+type LastSelected = 'ClimateConceptNode' | 'SummaryNode' | 'Connection' | null
 
 interface GraphState {
   lastSelected: LastSelected;
@@ -36,7 +36,7 @@ export const graphSlice = createSlice({
         state.selectedNode = action.payload.data as string;
       } else if (action.payload.lastSelected === 'SummaryNode') {
         state.selectedNode = action.payload.data as string;
-      } else if (action.payload.lastSelected === 'Edge') {
+      } else if (action.payload.lastSelected === 'Connection') {
         state.selectedEdge = action.payload.data as [string, string];
       }
     },

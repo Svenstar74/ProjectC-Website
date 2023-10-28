@@ -1,4 +1,4 @@
-import DisplayGraph from './components/DisplayGraph'
+import { DisplayGraph } from './features/display-graph'
 
 function App() {
   return (
