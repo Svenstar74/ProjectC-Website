@@ -6,7 +6,7 @@ import LoadGraphFromMongoDb from './LoadGraphFromMongoDb';
 // import HamburgerMenu from './containers/HamburgerMenu/HamburgerMenu';
 import QuickAccessBar from '../../../components/containers/QuickAccessBar/GraphEvents';
 
-import { AddNode } from '../../add-node';
+import { CreateClimateConceptNode } from '../../create-new-node/components';
 import { DeleteEdge } from '../../delete-edge';
 
 import { DragAndDrop } from '../../drag-and-drop';
@@ -56,15 +56,15 @@ function DisplayGraph() {
       </ControlsContainer>
 
       <LoadGraphFromMongoDb />
-      
+
       <QuickAccessBar>
         <AddConnection hoveredNode='' hideQab={() => {}} />
       </QuickAccessBar>
 
       <AddConnectionSnackbar />
-      
+
       <LoginIcon />
-      
+
       <ResponsiveLabelSize />
       <DoubleClickStageBehavior />
 
@@ -73,10 +73,10 @@ function DisplayGraph() {
       <ToggleViewEdgeTypes />
       <ToggleViewOfGroupedNodes />
       <DetailPages />
-      
+
       <SelectTool />
-      
-      <AddNode />
+
+      <CreateClimateConceptNode />
       <DeleteEdge />
 
       <ControlsContainer position="bottom-right" style={{ border: 'none' }}>
