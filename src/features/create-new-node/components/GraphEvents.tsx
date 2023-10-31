@@ -2,10 +2,13 @@
 import { useEffect, useState } from 'react';
 import { useRegisterEvents, useSigma } from '@react-sigma/core';
 
+import { useAuthState } from '../../authentication';
 import ContextMenu from './ContextMenu';
 import CreateNodeDialog from './CreateNodeDialog';
 
 function GraphEvents() {
+  const { isLoggedIn } = useAuthState();
+
   const sigma = useSigma();
   const registerEvents = useRegisterEvents();
 
@@ -22,6 +25,8 @@ function GraphEvents() {
   useEffect(() => {
     registerEvents({
       rightClickStage: (e) => {
+        if (!isLoggedIn) return;
+
         setShowContextMenu(true);
         setContextMenuPosition({ x: e.event.x, y: e.event.y });
       },
