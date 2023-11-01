@@ -26,7 +26,7 @@ function LoginDialog({ show, onClose, onLogin }: Props) {
           </DialogContentText>
 
           <div style={{ marginTop: 20 }}>
-            <TextField label="Username" variant="outlined" onChange={event => setUserName(event.target.value)} fullWidth />
+            <TextField autoFocus label="Username" variant="outlined" onChange={event => setUserName(event.target.value)} fullWidth />
           </div>
         </DialogContent>
 
