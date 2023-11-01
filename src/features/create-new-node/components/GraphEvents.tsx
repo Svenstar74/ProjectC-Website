@@ -31,7 +31,7 @@ function GraphEvents() {
         setContextMenuPosition({ x: e.event.x, y: e.event.y });
       },
     });
-  }, [sigma, registerEvents]);
+  }, [sigma, registerEvents, isLoggedIn]);
 
   useEffect(() => {
     // Disable showing the default context menu on right click
