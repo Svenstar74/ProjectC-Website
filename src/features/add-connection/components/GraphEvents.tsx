@@ -6,6 +6,7 @@ import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import { eventBus } from '../../../eventBus';
 import useApiClient from '../../../components/hooks/useApiClient';
 import { useAppSelector } from '../../../store/redux/hooks';
+import useCheckExistingSources from '../hooks/useCheckExistingSources';
 
 interface Props {
   hoveredNode: string | null;
@@ -13,11 +14,12 @@ interface Props {
 }
 
 function GraphEvents({ hoveredNode, hideQab }: Props) {
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
-  const apiClient = useApiClient();
-  
   const sigma = useSigma();
   const registerEvents = useRegisterEvents();
+
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const apiClient = useApiClient();
+  const checkExistingSources = useCheckExistingSources(); 
 
   const [makingConnection, setMakingConnection] = useState(false);
   const [connectionType, setConnectionType] = useState<'contributesTo' | 'isEqualTo' | 'isA'>('contributesTo');
@@ -45,6 +47,14 @@ function GraphEvents({ hoveredNode, hideQab }: Props) {
   }
 
   async function createConnection(endNode: string) {
+    if (connectionType === 'contributesTo') {
+      const exists = await checkExistingSources(startNode, endNode);
+      if (!exists) {
+        eventBus.emit('showErrorDialog');
+        return;
+      }
+    }
+
     try {
       const connection = await apiClient.createConnection(startNode, endNode, connectionType);
   

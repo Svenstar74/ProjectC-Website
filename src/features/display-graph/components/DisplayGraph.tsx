@@ -20,6 +20,9 @@ import { Searchbar } from '../../search';
 import { ToggleViewOfGroupedNodes } from '../../toggle-view-of-grouped-nodes';
 import { SelectTool } from '../../select-tool';
 import ShowIsolatedNodesButton from '../../show-isolated-nodes';
+import { useEffect, useState } from 'react';
+import { eventBus } from '../../../eventBus';
+import ErrorDialog from '../../add-connection/components/ErrorDialog';
 
 function DisplayGraph() {  
   //#region Fullscreen handling
@@ -41,6 +44,18 @@ function DisplayGraph() {
   //   };
   // }, []);
   //#endregion
+
+  const [showErrorDialog, setShowErrorDialog] = useState(false);
+
+  useEffect(() => {
+    eventBus.on('showErrorDialog', () => {
+      setShowErrorDialog(true);
+    });
+
+    return () => {
+      eventBus.off('showErrorDialog');
+    };
+  }, []);
   
   return (
     <SigmaContainer
@@ -90,6 +105,7 @@ function DisplayGraph() {
       )} */}
 
       {/* <GetHelpButton /> */}
+      <ErrorDialog open={showErrorDialog} onClose={() => setShowErrorDialog(false)} />
       <ShowIsolatedNodesButton />
     </SigmaContainer>
   );
