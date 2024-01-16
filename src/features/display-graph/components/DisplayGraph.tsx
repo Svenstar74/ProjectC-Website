@@ -82,7 +82,7 @@ function DisplayGraph() {
       <ControlsContainer position="bottom-right" style={{ border: 'none' }}>
         <Searchbar />
       </ControlsContainer>
-      
+
       {/* {!isFullscreen && (
         <HamburgerMenu>
           <DownloadGraphAsCsv onClick={() => {}} />

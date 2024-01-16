@@ -31,7 +31,9 @@ function NewSource({ onAddSource }: Props) {
         fullWidth
         variant="outlined"
         label="Link"
+        placeholder="https://example.com"
         style={{ verticalAlign: 'middle', marginBottom: '20px' }}
+        value={url}
         onChange={(event) => setUrl(event.target.value)}
       />
 
@@ -40,6 +42,8 @@ function NewSource({ onAddSource }: Props) {
         multiline
         variant="outlined"
         label="Original Text"
+        placeholder='The text that was originally on the website'
+        value={originalText}
         onChange={(event) => setOriginalText(event.target.value)}
       />
 
