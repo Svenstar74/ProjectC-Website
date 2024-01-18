@@ -1,6 +1,6 @@
 import useApiClient from "../../../components/hooks/useApiClient";
 
-function useCheckExistingSources() {
+function useFindMatchingSources() {
   const apiClient = useApiClient();
 
   /**
@@ -8,7 +8,7 @@ function useCheckExistingSources() {
    * @param sourceNodeId 
    * @param targetNodeId 
    */
-  async function checkExistingSources(sourceNodeId: string, targetNodeId: string) {
+  async function findMatchingSources(sourceNodeId: string, targetNodeId: string) {
     const sourceNode = await apiClient.getClimateConceptNode(sourceNodeId);
     const targetNode = await apiClient.getClimateConceptNode(targetNodeId);
 
@@ -22,10 +22,12 @@ function useCheckExistingSources() {
       });
     });
 
-    return intersection.length > 0;
+    return intersection;
   }
 
-  return checkExistingSources;
+  return {
+    findMatchingSources,
+  };
 }
 
-export default useCheckExistingSources;
+export default useFindMatchingSources;

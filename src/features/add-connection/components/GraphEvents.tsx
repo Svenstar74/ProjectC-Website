@@ -6,7 +6,7 @@ import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import { eventBus } from '../../../eventBus';
 import useApiClient from '../../../components/hooks/useApiClient';
 import { useAppSelector } from '../../../store/redux/hooks';
-import useCheckExistingSources from '../hooks/useCheckExistingSources';
+import useFindMatchingSources from '../hooks/useFindMatchingSources';
 
 interface Props {
   hoveredNode: string | null;
@@ -19,7 +19,7 @@ function GraphEvents({ hoveredNode, hideQab }: Props) {
 
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const apiClient = useApiClient();
-  const checkExistingSources = useCheckExistingSources(); 
+  const { findMatchingSources } = useFindMatchingSources(); 
 
   const [makingConnection, setMakingConnection] = useState(false);
   const [connectionType, setConnectionType] = useState<'contributesTo' | 'isEqualTo' | 'isA'>('contributesTo');
@@ -47,16 +47,17 @@ function GraphEvents({ hoveredNode, hideQab }: Props) {
   }
 
   async function createConnection(endNode: string) {
+    let matchingSources: any[] = [];
     if (connectionType === 'contributesTo') {
-      const exists = await checkExistingSources(startNode, endNode);
-      if (!exists) {
+      matchingSources = await findMatchingSources(startNode, endNode);
+      if (matchingSources.length === 0) {
         eventBus.emit('showErrorDialog');
         return;
       }
     }
 
     try {
-      const connection = await apiClient.createConnection(startNode, endNode, connectionType);
+      const connection = await apiClient.createConnection(startNode, endNode, connectionType, matchingSources);
   
       if (connection) {
         let type = 'arrow';

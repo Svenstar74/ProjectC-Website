@@ -125,7 +125,7 @@ function NameStepperContent({ onClose, onNameChosen }: Props) {
           >
             A node with a very similar name exists: <br />
             Name: {data?.data.similarName.name} <br />
-            Similarity: {data?.data.similarName.similarity * 100}% <br />
+            {/* Similarity: {data?.data.similarName.similarity * 100}% <br /> */}
           </Alert>
         </Collapse>
       </DialogContent>

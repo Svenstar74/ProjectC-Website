@@ -1,4 +1,4 @@
-import { IComment, TConnectionType } from "business-logic";
+import { IComment, ISource, TConnectionType } from "business-logic";
 import { useAppSelector } from "../../store/redux/hooks";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -69,13 +69,13 @@ function useApiClient() {
     });
   }
 
-  async function createConnection(sourceId: string, targetId: string, type: TConnectionType) {
+  async function createConnection(sourceId: string, targetId: string, type: TConnectionType, sources?: ISource[]) {
     const response = await fetch(BASE_URL + '/connections', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ sourceId, targetId, type, createdBy: userName }),
+      body: JSON.stringify({ sourceId, targetId, type, createdBy: userName, sources }),
     });
 
     const data = await response.json();
