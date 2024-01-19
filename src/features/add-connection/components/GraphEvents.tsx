@@ -51,7 +51,7 @@ function GraphEvents({ hoveredNode, hideQab }: Props) {
     if (connectionType === 'contributesTo') {
       matchingSources = await findMatchingSources(startNode, endNode);
       if (matchingSources.length === 0) {
-        eventBus.emit('showErrorDialog');
+        eventBus.emit('addMissingSource', { startNode, endNode });
         return;
       }
     }
