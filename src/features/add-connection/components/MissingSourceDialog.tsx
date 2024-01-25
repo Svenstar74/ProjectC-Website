@@ -1,34 +1,27 @@
 import { useEffect, useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { ISource } from "business-logic";
 
 import { eventBus } from "../../../eventBus";
 import useCreateConnection from "../hooks/useCreateConnection";
-import useApiClient from "../../../components/hooks/useApiClient";
+import { NewSource, Source } from "../../detail-pages/components/sources";
+import { LoadingButton } from "@mui/lab";
 
 function MissingSourceDialog() {
-  const apiClient = useApiClient();
   const { createConnection } = useCreateConnection();
 
   const [open, setOpen] = useState(false);
   const [sourceId, setSourceId] = useState('');
   const [targetId, setTargetId] = useState('');
 
-  const [sourceUrl, setSourceUrl] = useState('');
-  const [sourceOriginalText, setSourceOriginalText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [sources, setSources] = useState<ISource[]>([]);
 
   async function handleCreateConnection() {
-    const result = await createConnection(
-      sourceId,
-      targetId,
-      'contributesTo',
-      [{ url: sourceUrl, originalText: sourceOriginalText }],
-    );
+    setIsLoading(true);
+    await createConnection(sourceId, targetId, 'contributesTo', sources);
 
-    if (result) {
-      apiClient.addSource(sourceId, sourceUrl, sourceOriginalText, '/climate-concept-nodes');
-      apiClient.addSource(targetId, sourceUrl, sourceOriginalText, '/climate-concept-nodes');
-    }
-
+    setIsLoading(false);
     setOpen(false);
   }
 
@@ -45,8 +38,7 @@ function MissingSourceDialog() {
   }, []);
 
   useEffect(() => {
-    setSourceUrl('');
-    setSourceOriginalText('');
+    setSources([]);
   }, [open]);
 
   return (
@@ -61,29 +53,15 @@ function MissingSourceDialog() {
           the two nodes and the connection that will be created.
         </DialogContentText>
 
-        <TextField
-          fullWidth
-          variant="outlined"
-          label="Link"
-          placeholder="https://example.com"
-          style={{ verticalAlign: 'middle', marginBottom: '20px' }}
-          value={sourceUrl}
-          onChange={(event) => setSourceUrl(event.target.value)}
-        />
+        <NewSource onAddSource={(url, originalText) => setSources(current => [...current, { url, originalText }])} />
+        {sources.map((source, index) => (
+          <Source key={index} id={index.toString()} url={source.url} originalText={source.originalText} onDeleteSource={() => setSources(current => current.filter(src => src.url !== source.url && src.originalText !== source.originalText))} />
+        ))}
 
-        <TextField
-          fullWidth
-          multiline
-          variant="outlined"
-          label="Original Text"
-          placeholder='The text that was originally on the website'
-          value={sourceOriginalText}
-          onChange={(event) => setSourceOriginalText(event.target.value)}
-        />
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpen(false)}>Cancel</Button>
-        <Button onClick={handleCreateConnection} disabled={!sourceUrl || !sourceOriginalText}>Create Connection</Button>
+        <LoadingButton loading={isLoading} onClick={handleCreateConnection} disabled={sources.length === 0 || isLoading}>Create Connection</LoadingButton>
       </DialogActions>
     </Dialog>
   );

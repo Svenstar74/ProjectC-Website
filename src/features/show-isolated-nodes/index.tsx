@@ -24,6 +24,15 @@ function ShowIsolatedNodesButton() {
       });
 
       const paths: Map<string, string[][]> = new Map();
+
+      const graph = sigma.getGraph().copy();
+      graph.forEachEdge((edge) => {
+        const attributes = graph.getEdgeAttributes(edge);
+        if (attributes.connectionType === 'isA') {
+          graph.dropEdge(edge);
+        }
+      });
+
       sigma.getGraph().forEachNode((node) => {
         const pathsToNode = allSimplePaths(sigma.getGraph(), gasEmissionsNodeId, node);
         paths.set(node, pathsToNode);

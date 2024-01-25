@@ -40,7 +40,15 @@ function Paths({ id }: Props) {
   }
 
   useEffect(() => {
-    const paths = allSimpleEdgePaths(sigma.getGraph(), gasEmissionsNodeId, id);
+    const graph = sigma.getGraph().copy();
+    graph.forEachEdge((edge) => {
+      const attributes = graph.getEdgeAttributes(edge);
+      if (attributes.connectionType === 'isA') {
+        graph.dropEdge(edge);
+      }
+    });
+
+    const paths = allSimpleEdgePaths(graph, gasEmissionsNodeId, id);
     setPaths(paths);
   }, [sigma, id]);
 
