@@ -4,20 +4,20 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSigma } from '@react-sigma/core';
 
 import EditStringRepresentationDialog from './EditStringRepresentationDialog';
-import { Comments } from './comments';
 import { Sources } from './sources';
 import ConfirmDialog from '../../../components/dialogs/ConfirmDialog';
 import ReviewCorrectionChips from './ReviewCorrectionChips';
 import useApiClient from '../../../components/hooks/useApiClient';
-import { IClimateConceptNode, IComment, IConnection } from 'business-logic';
+import { IClimateConceptNode, IConnection } from 'business-logic';
 import { useAppSelector } from '../../../store/redux/hooks';
+import { CommentAccordion } from '../../comments';
 
 interface Props {
   edgeId: string;
 }
 
 function EdgeDetails({ edgeId }: Props) {
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const { isLoggedIn, userName } = useAppSelector((state) => state.auth);
   const apiClient = useApiClient();
   const sigma = useSigma();
 
@@ -25,8 +25,6 @@ function EdgeDetails({ edgeId }: Props) {
   const [openEditDialogSource, setOpenEditDialogSource] = useState(false);
   const [openEditDialogTarget, setOpenEditDialogTarget] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-
-  const [comments, setComments] = useState<IComment[]>([]);
 
   function onDeleteEdge() {
     apiClient.deleteConnection(edgeId)
@@ -104,11 +102,6 @@ function EdgeDetails({ edgeId }: Props) {
     apiClient.getConnection(edgeId).then((connection) => {
       setConnection(connection);
       setConnectionType(connection.type);
-
-      apiClient.getCommentsForReferenceId(edgeId)
-        .then((comments) => {
-          setComments(comments);
-        })
 
       apiClient.getClimateConceptNode(connection.sourceId).then((source) => {
           setSource(source);
@@ -238,7 +231,8 @@ function EdgeDetails({ edgeId }: Props) {
 
             <ReviewCorrectionChips endpoint='/connections' object={connection} type='connection' />
 
-            <Comments id={edgeId} comments={comments} />
+            <CommentAccordion referenceId={edgeId} userIsAuthorized={isLoggedIn} userName={userName} />
+
             <Sources id={edgeId} endpoint='/connections' sources={connection.sources} />
               
           </CardContent>

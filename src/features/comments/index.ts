@@ -1,0 +1,1 @@
+export { CommentAccordion } from './components';

@@ -3,29 +3,28 @@ import { Card, CardContent, CardHeader, Collapse, IconButton, ListItemText, Menu
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useSigma } from '@react-sigma/core';
 
-import { IClimateConceptNode, IComment } from "business-logic";
+import { IClimateConceptNode } from "business-logic";
 
 import EditStringRepresentationDialog from "./EditStringRepresentationDialog";
-import { Comments } from "./comments";
 import { Sources } from "./sources";
 import ConfirmDialog from "../../../components/dialogs/ConfirmDialog";
 import ReviewCorrectionChips from "./ReviewCorrectionChips";
 import useApiClient from "../../../components/hooks/useApiClient";
 import { useAppSelector } from "../../../store/redux/hooks";
 import Paths from "./path/Paths";
+import { CommentAccordion } from "../../comments";
 
 interface Props {
   climateConceptId: string;
 }
 
 function ClimateConceptNodeDetails({ climateConceptId }: Props) {
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const { isLoggedIn, userName } = useAppSelector((state) => state.auth);
   const apiClient = useApiClient();
   const sigma = useSigma();
   
   const [expanded, setExpanded] = useState(true);
   const [climateConceptNode, setClimateConceptNode] = useState<IClimateConceptNode>();
-  const [comments, setComments] = useState<IComment[]>([]);
   
   // For the menu that can be opened with the three dots in the upper right corner
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -60,10 +59,6 @@ function ClimateConceptNodeDetails({ climateConceptId }: Props) {
     apiClient.getClimateConceptNode(climateConceptId)
       .then((node) => {
         setClimateConceptNode(node);
-        apiClient.getCommentsForReferenceId(climateConceptId)
-          .then((comments) => {
-            setComments(comments);
-          })
       });
   }, [climateConceptId]);
 
@@ -149,7 +144,9 @@ function ClimateConceptNodeDetails({ climateConceptId }: Props) {
             <ReviewCorrectionChips endpoint='/climate-concept-nodes' object={climateConceptNode} type='node' />
 
             <Paths id={climateConceptId} />
-            <Comments id={climateConceptId} comments={comments} />
+
+            <CommentAccordion referenceId={climateConceptId} userIsAuthorized={isLoggedIn} userName={userName} />
+
             <Sources endpoint='/climate-concept-nodes' id={climateConceptId} sources={climateConceptNode.sources} />
           </CardContent>
         </Collapse>

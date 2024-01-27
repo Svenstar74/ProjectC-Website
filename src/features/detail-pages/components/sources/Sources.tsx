@@ -52,7 +52,7 @@ function Sources({ id, endpoint, sources }: Props) {
   }, [sources]);
 
   return (
-    <Accordion defaultExpanded style={{ marginTop: '20px' }}>
+    <Accordion defaultExpanded>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Sources</Typography>
       </AccordionSummary>

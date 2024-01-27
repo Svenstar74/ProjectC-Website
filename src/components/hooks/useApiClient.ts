@@ -1,4 +1,4 @@
-import { IComment, ISource, TConnectionType } from "business-logic";
+import { ISource, TConnectionType } from "business-logic";
 import { useAppSelector } from "../../store/redux/hooks";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -148,25 +148,6 @@ function useApiClient() {
     });
   }
 
-  async function getCommentsForReferenceId(referenceId: string) {
-    const response = await fetch(BASE_URL + `/comments/reference/${referenceId}`);
-    const data = await response.json();
-    return data.data;
-  }
-
-  async function createComment(referenceId: string, text: string): Promise<IComment> {
-    const response = await fetch(BASE_URL + '/comments', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ text, referenceId, createdBy: userName }),
-    });
-
-    const data = await response.json();
-    return data.data;
-  }
-
   return {
     getAllClimateConceptNodes,
     getClimateConceptNode,
@@ -187,9 +168,6 @@ function useApiClient() {
     updateNeedsReviewLabel,
     updateNeedsCorrectionLabel,
     updateIsReviewedLabel,
-
-    getCommentsForReferenceId,
-    createComment,
   };
 }
 
