@@ -49,7 +49,7 @@ function MissingSourceDialog() {
         <DialogContentText marginBottom={5}>
           To create a 'contributes to' connection between two nodes, it
           is necessary for both nodes to have an identical source. Please
-          create this source below and it will automatically be added two
+          create this source below and it will automatically be added to
           the two nodes and the connection that will be created.
         </DialogContentText>
 
