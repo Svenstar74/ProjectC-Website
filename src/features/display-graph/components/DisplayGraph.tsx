@@ -21,6 +21,7 @@ import { ToggleViewOfGroupedNodes } from '../../toggle-view-of-grouped-nodes';
 import { SelectTool } from '../../select-tool';
 import ShowIsolatedNodesButton from '../../show-isolated-nodes';
 import MissingSourceDialog from '../../add-connection/components/MissingSourceDialog';
+import { TestButton } from 'src/features/admin';
 
 function DisplayGraph() {  
   //#region Fullscreen handling
@@ -51,6 +52,8 @@ function DisplayGraph() {
       }}
       style={{ width: '100vw', height: '100vh' }}
     >
+      <TestButton />
+
       <ControlsContainer position="top-right">
         <ZoomControl />
         <FullScreenControl />

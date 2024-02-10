@@ -6,6 +6,7 @@ import NewSource from './NewSource';
 import Source from './Source';
 import useApiClient from '../../../../components/hooks/useApiClient';
 import { useAppSelector } from '../../../../store/redux/hooks';
+import { captureMessage } from '@sentry/react';
 
 interface Props {
   id: string;
@@ -47,6 +48,10 @@ function Sources({ id, endpoint, sources }: Props) {
     );
   }
 
+  if (sourceList === undefined) {
+    captureMessage('sourceList is undefined for id ' + id);
+  }
+
   useEffect(() => {
     setSourceList(sources);
   }, [sources]);
@@ -71,7 +76,7 @@ function Sources({ id, endpoint, sources }: Props) {
         {showNewSource && <NewSource onAddSource={addSource} />}
 
         <List dense>
-          {sourceList.map((source) => (
+          {sourceList !== undefined &&  sourceList.map((source) => (
             <Source
               key={source.url + source.originalText}
               id={id}
