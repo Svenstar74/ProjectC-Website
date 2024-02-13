@@ -26,7 +26,6 @@ function Searchbar() {
 
     const validNodes = options.filter(option => option.label.toLowerCase().includes(inputValue.toLowerCase()));
     if (validNodes.length < 400) {
-      console.log(validNodes.length)
       validNodes.forEach(node => {
         sigma.getGraph().setNodeAttribute(node.value, 'highlighted', true);
       })

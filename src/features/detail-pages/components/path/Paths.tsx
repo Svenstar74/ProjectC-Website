@@ -27,10 +27,18 @@ function Paths({ id }: Props) {
           return data;
         }
 
-        if (paths[index].includes(edge)) {
-          data.color = '#f00';
-          data.hidden = false;
-          return data;
+        if (index === -1) {
+          if (paths.some((path) => path.includes(edge))) {
+            data.color = '#f00';
+            data.hidden = false;
+            return data;
+          }
+        } else {
+          if (paths[index].includes(edge)) {
+            data.color = '#f00';
+            data.hidden = false;
+            return data;
+          }
         }
 
         data.color = '#cbcbcb';
@@ -40,6 +48,8 @@ function Paths({ id }: Props) {
   }
 
   useEffect(() => {
+    setSelectedIndex(null);
+
     const graph = sigma.getGraph().copy();
     graph.forEachEdge((edge) => {
       const attributes = graph.getEdgeAttributes(edge);
@@ -59,6 +69,12 @@ function Paths({ id }: Props) {
       </AccordionSummary>
       <AccordionDetails>
         <List>
+          {paths.length > 0 && <>
+            <Divider />
+            <ListItemButton selected={selectedIndex === -1} onClick={() => handleListItemClick(-1)}>
+              <ListItemText>All Paths</ListItemText>
+            </ListItemButton>
+          </>}
           <Divider />
           {paths.map((path, index) => (
             <div key={index}>
