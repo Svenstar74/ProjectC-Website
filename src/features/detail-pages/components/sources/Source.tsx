@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { IconButton, TextField, Tooltip } from '@mui/material';
-import LaunchIcon from '@mui/icons-material/Launch';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { ContentCopy, Delete, Launch } from '@mui/icons-material';
 
+import { useToastMessage } from 'src/shared';
 import ConfirmDialog from '../../../../components/dialogs/ConfirmDialog';
 import { useAppSelector } from '../../../../store/redux/hooks';
 
@@ -17,18 +17,26 @@ interface Props {
   ) => void;
 }
 
-function Source({
-  id,
-  url,
-  originalText,
-  onDeleteSource,
-}: Props) {
+function Source({ id, url, originalText, onDeleteSource }: Props) {
+  const { showToast } = useToastMessage();
+
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   function confirmDeleteSource() {
     setShowConfirmDialog(false);
     onDeleteSource(id, url, originalText)
+  }
+
+  function copySource() {
+    navigator.clipboard.write([
+      new ClipboardItem({
+        'text/plain': new Blob([`${url}\n\n${originalText}`], { type: 'text/plain' }),
+        'text/html': new Blob([JSON.stringify({ url, originalText })], { type: 'text/html' }),
+      }),
+    ]);
+
+    showToast('Source copied to clipboard');
   }
 
   return (
@@ -52,7 +60,7 @@ function Source({
             readOnly: true,
             endAdornment: (
               <IconButton onClick={() => window.open(url, '_blank', 'noreferrer')} style={{ marginLeft: '20px' }}>
-                <LaunchIcon />
+                <Launch />
               </IconButton>
             ),
           }}
@@ -70,13 +78,23 @@ function Source({
         />
 
         {isLoggedIn &&
-          <Tooltip title="Delete Source" style={{ float: 'right' }}>
-            <span>
-              <IconButton onClick={() => setShowConfirmDialog(true)}>
-                <DeleteIcon/>
-              </IconButton>
-            </span>
-          </Tooltip>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 5 }}>
+            <Tooltip title="Delete Source">
+              <span>
+                <IconButton onClick={() => setShowConfirmDialog(true)}>
+                  <Delete />
+                </IconButton>
+              </span>
+            </Tooltip>
+
+            <Tooltip title="Copy Source">
+              <span>
+                <IconButton onClick={copySource}>
+                  <ContentCopy />
+                </IconButton>
+              </span>
+            </Tooltip>
+          </div>
         }
       </div>
 

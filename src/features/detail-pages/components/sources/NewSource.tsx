@@ -1,14 +1,36 @@
 import { useState } from 'react';
 import { IconButton, TextField, Tooltip } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Add, ContentPaste } from '@mui/icons-material';
+
+import { useToastMessage } from 'src/shared';
 
 interface Props {
   onAddSource: (url: string, originalText: string) => void;
 }
 
 function NewSource({ onAddSource }: Props) {
+  const { showToast } = useToastMessage();
+
   const [url, setUrl] = useState('');
   const [originalText, setOriginalText] = useState('');
+
+  async function onPasteSource() {
+    const clipboardContents = await navigator.clipboard.read();
+    
+    try {
+      const clipboardContent = await clipboardContents[0].getType('text/html');
+      const clipboardJSON = await JSON.parse(await clipboardContent.text());
+
+      if (clipboardJSON.url === undefined || clipboardJSON.originalText === undefined) {
+        throw new Error('No source found in clipboard');
+      }
+
+      setUrl(clipboardJSON.url);
+      setOriginalText(clipboardJSON.originalText);
+    } catch (error) {
+      showToast('No source found in clipboard', 'error');
+    }
+  }
 
   function addSource() {
     setUrl('');
@@ -47,13 +69,23 @@ function NewSource({ onAddSource }: Props) {
         onChange={(event) => setOriginalText(event.target.value)}
       />
 
-      <Tooltip title="Add Source" style={{ float: 'right' }}>
-        <span>
-          <IconButton onClick={addSource} disabled={url === '' || originalText === ''}>
-            <AddIcon />
-          </IconButton>
-        </span>
-      </Tooltip>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 5 }}>
+        <Tooltip title="Paste Source">
+          <span>
+            <IconButton onClick={onPasteSource}>
+              <ContentPaste />
+            </IconButton>
+          </span>
+        </Tooltip>
+
+        <Tooltip title="Add Source" style={{ float: 'right' }}>
+          <span>
+            <IconButton onClick={addSource} disabled={url === '' || originalText === ''}>
+              <Add />
+            </IconButton>
+          </span>
+        </Tooltip>
+      </div>
     </div>
   );
 };
