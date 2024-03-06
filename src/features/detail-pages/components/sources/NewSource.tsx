@@ -3,6 +3,7 @@ import { IconButton, TextField, Tooltip } from '@mui/material';
 import { Add, ContentPaste } from '@mui/icons-material';
 
 import { useToastMessage } from 'src/shared';
+import { captureException } from '@sentry/react';
 
 interface Props {
   onAddSource: (url: string, originalText: string) => void;
@@ -15,20 +16,19 @@ function NewSource({ onAddSource }: Props) {
   const [originalText, setOriginalText] = useState('');
 
   async function onPasteSource() {
-    const clipboardContents = await navigator.clipboard.read();
-    
     try {
-      const clipboardContent = await clipboardContents[0].getType('text/html');
-      const clipboardJSON = await JSON.parse(await clipboardContent.text());
+      const text = await navigator.clipboard.readText();
+      const source = JSON.parse(text);
 
-      if (clipboardJSON.url === undefined || clipboardJSON.originalText === undefined) {
+      if (source.url === undefined || source.originalText === undefined) {
         throw new Error('No source found in clipboard');
       }
 
-      setUrl(clipboardJSON.url);
-      setOriginalText(clipboardJSON.originalText);
+      setUrl(source.url);
+      setOriginalText(source.originalText);
     } catch (error) {
       showToast('No source found in clipboard', 'error');
+      captureException(error);
     }
   }
 

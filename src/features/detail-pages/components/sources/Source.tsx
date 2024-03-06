@@ -29,13 +29,7 @@ function Source({ id, url, originalText, onDeleteSource }: Props) {
   }
 
   function copySource() {
-    navigator.clipboard.write([
-      new ClipboardItem({
-        'text/plain': new Blob([`${url}\n\n${originalText}`], { type: 'text/plain' }),
-        'text/html': new Blob([JSON.stringify({ url, originalText })], { type: 'text/html' }),
-      }),
-    ]);
-
+    navigator.clipboard.writeText(JSON.stringify({ url, originalText }));
     showToast('Source copied to clipboard');
   }
 
