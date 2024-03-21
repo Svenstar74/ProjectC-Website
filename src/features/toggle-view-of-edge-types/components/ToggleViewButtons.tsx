@@ -45,7 +45,7 @@ function ToggleViewButtons() {
     
     dispatch(setIsEqualToVisible(!isEqualToVisible));
   }
-  
+
   return (
     <div style={{ position: 'absolute', top: 20, right: 260 }}>
       <Tooltip title={contributesToVisible ? "Hide contributesTo Connections" : "Show contributesTo Connections"}>

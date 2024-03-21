@@ -32,6 +32,10 @@ function LoadGraphFromMongoDb() {
           } else {
             graph.addEdgeWithKey(edge.id, edge.sourceId, edge.targetId, { size: 2, type, connectionType: edge.type, color });
 
+            // Hide isA edges by default
+            if (edge.type === 'isA') {
+              graph.setEdgeAttribute(edge.id, 'hidden', true);
+            }
           }
 
         });

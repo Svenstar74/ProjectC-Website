@@ -21,7 +21,7 @@ const initialState: GraphState = {
   selectedEdge: ['', ''],
   hoveredNode: '',
   contributesToVisible: true,
-  isAVisible: true,
+  isAVisible: false,
   isEqualToVisible: true,
   groupedView: false,
 };
