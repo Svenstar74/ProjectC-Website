@@ -63,6 +63,15 @@ function ClimateConceptNodeDetails({ climateConceptId }: Props) {
       });
   }, [climateConceptId]);
 
+  // Remove the highlight from the node when the component is unmounted
+  useEffect(() => {
+    return () => {
+      if (climateConceptId) {
+        sigma.getGraph().setNodeAttribute(climateConceptId, 'highlighted', false);
+      }
+    }
+  }, [sigma, climateConceptId]);
+
   if (!climateConceptNode) {
     return null;
   }

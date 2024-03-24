@@ -115,6 +115,19 @@ function EdgeDetails({ edgeId }: Props) {
   }, [edgeId]);
   //#endregion
 
+  // Remove the highlight from the nodes when the component is unmounted
+  useEffect(() => {
+    return () => {
+      if (source) {
+        sigma.getGraph().setNodeAttribute(source.id, 'highlighted', false);
+      }
+
+      if (target) {
+        sigma.getGraph().setNodeAttribute(target.id, 'highlighted', false);
+      }
+    }
+  }, [sigma, source, target]);
+
   if (!source || !target) {
     return null;
   }
@@ -190,11 +203,11 @@ function EdgeDetails({ edgeId }: Props) {
           title={
             <div style={{ display: 'grid', gridTemplateColumns: '70px 1fr' }}>
               <div>
-                <b>Cause</b>
+                <b>{connectionType === 'contributesTo' ? 'Cause' : 'Parent'}</b>
               </div>
               <NodeTitle title={source.name} />
               <div>
-                <b>Effect</b>
+                <b>{connectionType === 'contributesTo' ? 'Effect' : 'Child'}</b>
               </div>
               <NodeTitle title={target.name} />
             </div>
