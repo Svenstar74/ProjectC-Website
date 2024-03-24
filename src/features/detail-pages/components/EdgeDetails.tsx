@@ -11,6 +11,7 @@ import useApiClient from '../../../components/hooks/useApiClient';
 import { IClimateConceptNode, IConnection } from 'business-logic';
 import { useAppSelector } from '../../../store/redux/hooks';
 import { CommentAccordion } from '../../comments';
+import NodeTitle from './NodeTitle';
 
 interface Props {
   edgeId: string;
@@ -191,11 +192,11 @@ function EdgeDetails({ edgeId }: Props) {
               <div>
                 <b>Cause</b>
               </div>
-              <div>{source.name}</div>
+              <NodeTitle title={source.name} />
               <div>
                 <b>Effect</b>
               </div>
-              <div>{target.name}</div>
+              <NodeTitle title={target.name} />
             </div>
           }
           titleTypographyProps={{ variant: 'body1' }}

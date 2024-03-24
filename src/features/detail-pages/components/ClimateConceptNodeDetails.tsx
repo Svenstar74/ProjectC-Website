@@ -13,6 +13,7 @@ import useApiClient from "../../../components/hooks/useApiClient";
 import { useAppSelector } from "../../../store/redux/hooks";
 import Paths from "./path/Paths";
 import { CommentAccordion } from "../../comments";
+import NodeTitle from "./NodeTitle";
 
 interface Props {
   climateConceptId: string;
@@ -128,7 +129,7 @@ function ClimateConceptNodeDetails({ climateConceptId }: Props) {
               </Menu>
             </>
           }
-          title={climateConceptNode.name}
+          title={<div style={{ display: 'grid', gridTemplateColumns: '1fr' }}><NodeTitle title={climateConceptNode.name} /></div>}
           titleTypographyProps={{ variant: 'body1' }}
           subheader={
             <div style={{ display: 'flex', flexDirection: 'column' }}>
